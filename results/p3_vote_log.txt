@@ -1,0 +1,211 @@
+=== VOTE B_plan spider_dev Fri Oct 30 20:12:18 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:28, 10.94it/s]Loading weights:  23%|██▎       | 72/311 [00:00<00:00, 312.07it/s]Loading weights:  41%|████      | 127/311 [00:00<00:00, 403.11it/s]Loading weights:  69%|██████▉   | 215/311 [00:00<00:00, 568.41it/s]Loading weights:  89%|████████▉ | 278/311 [00:00<00:00, 583.53it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 479.85it/s]
+adapter ckpt/p3_B_plan
+100/1034  4.99s/q
+200/1034  4.91s/q
+300/1034  4.82s/q
+400/1034  4.72s/q
+500/1034  4.73s/q
+600/1034  4.83s/q
+700/1034  4.78s/q
+800/1034  4.80s/q
+900/1034  4.76s/q
+1000/1034  4.84s/q
+done 1034 in 83.1 min; plans parsed: 1034; VRAM 4.6 GB -> preds/p3/V_B_plan_spider_dev.jsonl
+=== VOTE B_plan bird_dev Fri Oct 30 21:35:30 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<01:22,  3.77it/s]Loading weights:  17%|█▋        | 52/311 [00:00<00:01, 176.19it/s]Loading weights:  31%|███       | 96/311 [00:00<00:00, 261.96it/s]Loading weights:  51%|█████     | 158/311 [00:00<00:00, 360.01it/s]Loading weights:  68%|██████▊   | 211/311 [00:00<00:00, 410.68it/s]Loading weights:  85%|████████▌ | 265/311 [00:00<00:00, 448.21it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 351.28it/s]
+adapter ckpt/p3_B_plan
+100/1534  6.59s/q
+200/1534  6.68s/q
+300/1534  6.51s/q
+400/1534  6.35s/q
+500/1534  6.25s/q
+600/1534  6.17s/q
+700/1534  6.11s/q
+800/1534  6.14s/q
+900/1534  6.20s/q
+1000/1534  6.25s/q
+1100/1534  6.40s/q
+1200/1534  6.47s/q
+1300/1534  6.45s/q
+1400/1534  6.42s/q
+1500/1534  6.40s/q
+done 1534 in 163.7 min; plans parsed: 1534; VRAM 6.0 GB -> preds/p3/V_B_plan_bird_dev.jsonl
+=== VOTE B_plan spider_syn Sat Oct 31 00:19:20 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:17, 17.45it/s]Loading weights:  33%|███▎      | 103/311 [00:00<00:00, 562.98it/s]Loading weights:  65%|██████▌   | 203/311 [00:00<00:00, 751.00it/s]Loading weights:  97%|█████████▋| 301/311 [00:00<00:00, 830.87it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 722.94it/s]
+adapter ckpt/p3_B_plan
+100/1034  5.05s/q
+200/1034  4.90s/q
+300/1034  4.84s/q
+400/1034  4.80s/q
+500/1034  4.81s/q
+600/1034  4.91s/q
+700/1034  4.86s/q
+800/1034  4.89s/q
+900/1034  4.83s/q
+1000/1034  4.91s/q
+done 1034 in 84.3 min; plans parsed: 1034; VRAM 4.6 GB -> preds/p3/V_B_plan_spider_syn.jsonl
+=== VOTE B_plan spider_dk Sat Oct 31 01:43:44 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:35,  8.80it/s]Loading weights:  33%|███▎      | 103/311 [00:00<00:00, 570.77it/s]Loading weights:  64%|██████▍   | 200/311 [00:00<00:00, 747.22it/s]Loading weights:  94%|█████████▎| 291/311 [00:00<00:00, 801.82it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 711.85it/s]
+adapter ckpt/p3_B_plan
+100/534  5.06s/q
+200/534  4.92s/q
+300/534  4.87s/q
+400/534  4.83s/q
+500/534  4.96s/q
+done 534 in 43.8 min; plans parsed: 534; VRAM 4.6 GB -> preds/p3/V_B_plan_spider_dk.jsonl
+=== VOTE B_plan spider_realistic Sat Oct 31 02:27:39 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:34,  9.04it/s]Loading weights:  32%|███▏      | 101/311 [00:00<00:00, 566.09it/s]Loading weights:  64%|██████▍   | 200/311 [00:00<00:00, 753.92it/s]Loading weights:  94%|█████████▎| 291/311 [00:00<00:00, 813.87it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 722.07it/s]
+adapter ckpt/p3_B_plan
+100/508  5.19s/q
+200/508  4.95s/q
+300/508  4.95s/q
+400/508  4.93s/q
+500/508  4.91s/q
+done 508 in 41.5 min; plans parsed: 508; VRAM 4.6 GB -> preds/p3/V_B_plan_spider_realistic.jsonl
+V_B_plan_bird_dev.jsonl                    EX  37.8  (n=1533, non-exec=176)  simple=45.3  moderate=27.6  challenging=22.2  | plan: tables-F1 90.3, flags 94.4, EX tables right/wrong 47.5/11.9
+V_B_plan_spider_dev.jsonl                  EX  72.1  (n=1034, non-exec=41)  easy=87.1  medium=76.5  hard=64.4  extra=45.8  | plan: tables-F1 95.6, flags 97.0, EX tables right/wrong 78.0/31.6
+V_B_plan_spider_dk.jsonl                   EX  56.6  (n=534, non-exec=34)  easy=66.4  medium=60.4  hard=51.4  extra=41.0  | plan: tables-F1 91.9, flags 96.0, EX tables right/wrong 64.9/27.1
+V_B_plan_spider_realistic.jsonl            EX  60.2  (n=508, non-exec=26)  easy=73.4  medium=65.5  hard=55.6  extra=39.2  | plan: tables-F1 93.6, flags 96.6, EX tables right/wrong 66.5/29.9
+V_B_plan_spider_syn.jsonl                  EX  59.4  (n=1034, non-exec=59)  easy=73.4  medium=60.2  hard=54.2  extra=42.0  | plan: tables-F1 89.8, flags 95.8, EX tables right/wrong 71.0/18.4
+=== VOTE B_plan_s2 spider_dev Sat Oct 31 03:11:19 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:17, 17.56it/s]Loading weights:  33%|███▎      | 104/311 [00:00<00:00, 568.53it/s]Loading weights:  66%|██████▌   | 204/311 [00:00<00:00, 756.17it/s]Loading weights:  97%|█████████▋| 301/311 [00:00<00:00, 832.82it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 725.30it/s]
+adapter ckpt/p3_B_plan_s2
+100/1034  4.99s/q
+200/1034  4.96s/q
+300/1034  4.89s/q
+400/1034  4.79s/q
+500/1034  4.80s/q
+600/1034  4.90s/q
+700/1034  4.84s/q
+800/1034  4.85s/q
+900/1034  4.81s/q
+1000/1034  4.88s/q
+done 1034 in 83.7 min; plans parsed: 1034; VRAM 4.6 GB -> preds/p3/V_B_plan_s2_spider_dev.jsonl
+=== VOTE B_plan_s2 bird_dev Sat Oct 31 04:35:10 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:18, 16.73it/s]Loading weights:  33%|███▎      | 104/311 [00:00<00:00, 560.23it/s]Loading weights:  67%|██████▋   | 207/311 [00:00<00:00, 762.11it/s]Loading weights:  97%|█████████▋| 301/311 [00:00<00:00, 824.95it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 723.84it/s]
+adapter ckpt/p3_B_plan_s2
+100/1534  6.49s/q
+200/1534  6.43s/q
+300/1534  6.30s/q
+400/1534  6.19s/q
+500/1534  6.10s/q
+600/1534  6.04s/q
+700/1534  5.99s/q
+800/1534  6.03s/q
+900/1534  6.09s/q
+1000/1534  6.14s/q
+1100/1534  6.28s/q
+1200/1534  6.35s/q
+1300/1534  6.33s/q
+1400/1534  6.31s/q
+1500/1534  6.27s/q
+done 1534 in 160.5 min; plans parsed: 1534; VRAM 6.0 GB -> preds/p3/V_B_plan_s2_bird_dev.jsonl
+=== VOTE B_plan_s2 spider_syn Sat Oct 31 07:15:44 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:36,  8.51it/s]Loading weights:  33%|███▎      | 103/311 [00:00<00:00, 549.95it/s]Loading weights:  67%|██████▋   | 207/311 [00:00<00:00, 761.83it/s]Loading weights:  97%|█████████▋| 302/311 [00:00<00:00, 826.70it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 721.32it/s]
+adapter ckpt/p3_B_plan_s2
+100/1034  5.17s/q
+200/1034  5.06s/q
+300/1034  4.98s/q
+400/1034  4.93s/q
+500/1034  4.94s/q
+600/1034  5.04s/q
+700/1034  4.99s/q
+800/1034  5.00s/q
+900/1034  4.93s/q
+1000/1034  5.01s/q
+done 1034 in 86.0 min; plans parsed: 1034; VRAM 4.6 GB -> preds/p3/V_B_plan_s2_spider_syn.jsonl
+=== VOTE B_plan_s2 spider_dk Sat Oct 31 08:42:07 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:35,  8.77it/s]Loading weights:  33%|███▎      | 103/311 [00:00<00:00, 566.60it/s]Loading weights:  66%|██████▌   | 204/311 [00:00<00:00, 753.75it/s]Loading weights:  97%|█████████▋| 301/311 [00:00<00:00, 831.75it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 724.55it/s]
+adapter ckpt/p3_B_plan_s2
+100/534  5.00s/q
+200/534  4.90s/q
+300/534  4.87s/q
+400/534  4.83s/q
+500/534  4.94s/q
+done 534 in 43.6 min; plans parsed: 534; VRAM 4.6 GB -> preds/p3/V_B_plan_s2_spider_dk.jsonl
+=== VOTE B_plan_s2 spider_realistic Sat Oct 31 09:25:51 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:18, 16.99it/s]Loading weights:  33%|███▎      | 103/311 [00:00<00:00, 561.26it/s]Loading weights:  66%|██████▌   | 204/311 [00:00<00:00, 756.36it/s]Loading weights:  97%|█████████▋| 302/311 [00:00<00:00, 833.19it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 726.55it/s]
+adapter ckpt/p3_B_plan_s2
+100/508  5.31s/q
+200/508  5.09s/q
+300/508  5.07s/q
+400/508  5.05s/q
+500/508  5.01s/q
+done 508 in 42.3 min; plans parsed: 508; VRAM 4.6 GB -> preds/p3/V_B_plan_s2_spider_realistic.jsonl
+V_B_plan_s2_bird_dev.jsonl                 EX  38.7  (n=1533, non-exec=179)  simple=47.2  moderate=28.0  challenging=18.8  | plan: tables-F1 89.9, flags 94.9, EX tables right/wrong 49.5/10.7
+V_B_plan_s2_spider_dev.jsonl               EX  72.1  (n=1034, non-exec=42)  easy=87.1  medium=76.0  hard=62.6  extra=48.8  | plan: tables-F1 95.8, flags 97.0, EX tables right/wrong 77.0/37.7
+V_B_plan_s2_spider_dk.jsonl                EX  55.4  (n=534, non-exec=36)  easy=70.0  medium=58.8  hard=48.6  extra=37.1  | plan: tables-F1 92.1, flags 96.3, EX tables right/wrong 62.8/26.6
+V_B_plan_s2_spider_realistic.jsonl         EX  61.2  (n=508, non-exec=29)  easy=75.2  medium=67.0  hard=56.6  extra=38.1  | plan: tables-F1 94.0, flags 96.8, EX tables right/wrong 66.8/33.7
+V_B_plan_s2_spider_syn.jsonl               EX  59.5  (n=1034, non-exec=72)  easy=76.2  medium=58.6  hard=54.8  extra=42.0  | plan: tables-F1 89.6, flags 96.3, EX tables right/wrong 70.1/22.3
+=== VOTE B_plan_s3 spider_dev Sat Oct 31 10:09:54 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:18, 17.02it/s]Loading weights:  33%|███▎      | 102/311 [00:00<00:00, 551.38it/s]Loading weights:  65%|██████▍   | 202/311 [00:00<00:00, 729.60it/s]Loading weights:  96%|█████████▋| 300/311 [00:00<00:00, 822.69it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 714.87it/s]
+adapter ckpt/p3_B_plan_s3
+100/1034  4.97s/q
+200/1034  5.00s/q
+300/1034  4.93s/q
+400/1034  4.82s/q
+500/1034  4.81s/q
+600/1034  4.89s/q
+700/1034  4.84s/q
+800/1034  4.86s/q
+900/1034  4.81s/q
+1000/1034  4.87s/q
+done 1034 in 83.6 min; plans parsed: 1034; VRAM 4.6 GB -> preds/p3/V_B_plan_s3_spider_dev.jsonl
+=== VOTE B_plan_s3 bird_dev Sat Oct 31 11:33:35 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:18, 17.11it/s]Loading weights:  33%|███▎      | 102/311 [00:00<00:00, 552.43it/s]Loading weights:  66%|██████▌   | 204/311 [00:00<00:00, 754.07it/s]Loading weights:  97%|█████████▋| 302/311 [00:00<00:00, 833.28it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 726.31it/s]
+adapter ckpt/p3_B_plan_s3
+100/1534  6.62s/q
+200/1534  6.51s/q
+300/1534  6.43s/q
+400/1534  6.31s/q
+500/1534  6.23s/q
+600/1534  6.17s/q
+700/1534  6.11s/q
+800/1534  6.13s/q
+900/1534  6.18s/q
+1000/1534  6.24s/q
+1100/1534  6.37s/q
+1200/1534  6.43s/q
+1300/1534  6.41s/q
+1400/1534  6.39s/q
+1500/1534  6.37s/q
+done 1534 in 162.8 min; plans parsed: 1534; VRAM 6.0 GB -> preds/p3/V_B_plan_s3_bird_dev.jsonl
+=== VOTE B_plan_s3 spider_syn Sat Oct 31 14:16:29 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:35,  8.75it/s]Loading weights:  31%|███       | 96/311 [00:00<00:00, 530.75it/s]Loading weights:  65%|██████▍   | 201/311 [00:00<00:00, 759.87it/s]Loading weights:  93%|█████████▎| 290/311 [00:00<00:00, 808.45it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 708.88it/s]
+adapter ckpt/p3_B_plan_s3
+100/1034  5.24s/q
+200/1034  5.10s/q
+300/1034  5.06s/q
+400/1034  4.98s/q
+500/1034  4.99s/q
+600/1034  5.09s/q
+700/1034  5.07s/q
+800/1034  5.08s/q
+900/1034  5.02s/q
+1000/1034  5.09s/q
+done 1034 in 87.3 min; plans parsed: 1034; VRAM 4.6 GB -> preds/p3/V_B_plan_s3_spider_syn.jsonl
+=== VOTE B_plan_s3 spider_dk Sat Oct 31 15:43:56 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:17, 17.80it/s]Loading weights:  31%|███       | 96/311 [00:00<00:00, 531.69it/s]Loading weights:  64%|██████▎   | 198/311 [00:00<00:00, 741.39it/s]Loading weights:  94%|█████████▍| 293/311 [00:00<00:00, 821.72it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 721.41it/s]
+adapter ckpt/p3_B_plan_s3
+100/534  5.13s/q
+200/534  5.06s/q
+300/534  4.99s/q
+400/534  4.92s/q
+500/534  5.01s/q
+done 534 in 44.2 min; plans parsed: 534; VRAM 4.6 GB -> preds/p3/V_B_plan_s3_spider_dk.jsonl
+=== VOTE B_plan_s3 spider_realistic Sat Oct 31 16:28:14 +03 2026
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:41,  7.54it/s]Loading weights:   1%|          | 2/311 [00:00<00:38,  8.11it/s]Loading weights:  16%|█▌        | 50/311 [00:00<00:01, 197.15it/s]Loading weights:  33%|███▎      | 104/311 [00:00<00:00, 315.94it/s]Loading weights:  50%|█████     | 156/311 [00:00<00:00, 384.28it/s]Loading weights:  66%|██████▌   | 204/311 [00:00<00:00, 414.27it/s]Loading weights:  83%|████████▎ | 258/311 [00:00<00:00, 450.19it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 361.71it/s]
+adapter ckpt/p3_B_plan_s3
+100/508  5.27s/q
+200/508  5.06s/q
+300/508  5.03s/q
+400/508  5.00s/q
+500/508  4.97s/q
+done 508 in 42.0 min; plans parsed: 508; VRAM 4.6 GB -> preds/p3/V_B_plan_s3_spider_realistic.jsonl
+V_B_plan_s3_bird_dev.jsonl                 EX  39.3  (n=1533, non-exec=193)  simple=48.0  moderate=26.9  challenging=23.6  | plan: tables-F1 90.8, flags 95.0, EX tables right/wrong 48.6/13.3
+V_B_plan_s3_spider_dev.jsonl               EX  69.9  (n=1034, non-exec=61)  easy=85.9  medium=73.8  hard=60.9  extra=45.2  | plan: tables-F1 95.4, flags 96.9, EX tables right/wrong 75.8/32.1
+V_B_plan_s3_spider_dk.jsonl                EX  53.9  (n=534, non-exec=58)  easy=66.4  medium=58.4  hard=47.3  extra=35.2  | plan: tables-F1 92.5, flags 96.0, EX tables right/wrong 60.5/28.8
+V_B_plan_s3_spider_realistic.jsonl         EX  58.7  (n=508, non-exec=46)  easy=73.4  medium=65.5  hard=52.5  extra=34.0  | plan: tables-F1 93.9, flags 96.7, EX tables right/wrong 64.8/28.7
+V_B_plan_s3_spider_syn.jsonl               EX  57.5  (n=1034, non-exec=92)  easy=70.2  medium=59.5  hard=52.5  extra=39.1  | plan: tables-F1 90.2, flags 96.2, EX tables right/wrong 66.9/23.4
+ALL DONE Sat Oct 31 17:12:04 +03 2026

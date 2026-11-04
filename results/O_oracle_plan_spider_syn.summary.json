@@ -1,0 +1,37 @@
+{
+ "file": "preds/p3/O_oracle_plan_spider_syn.jsonl",
+ "n": 1034,
+ "ex": 74.1,
+ "errors": 50,
+ "gold_errors": 0,
+ "by_hardness": {
+  "easy": {
+   "n": 248,
+   "ex": 89.5,
+   "errors": 7
+  },
+  "medium": {
+   "n": 440,
+   "ex": 73.0,
+   "errors": 26
+  },
+  "hard": {
+   "n": 177,
+   "ex": 65.5,
+   "errors": 15
+  },
+  "extra": {
+   "n": 169,
+   "ex": 63.3,
+   "errors": 2
+  }
+ },
+ "plan": {
+  "n": 1034,
+  "table_f1": 100.0,
+  "table_exact": 100.0,
+  "flag_acc": 100.0,
+  "ex_when_tables_right": 74.1,
+  "ex_when_tables_wrong": 0.0
+ }
+}

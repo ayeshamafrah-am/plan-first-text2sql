@@ -1,0 +1,37 @@
+{
+ "file": "preds/p3/B_plan_s3_spider_syn.jsonl",
+ "n": 1034,
+ "ex": 57.5,
+ "errors": 95,
+ "gold_errors": 0,
+ "by_hardness": {
+  "easy": {
+   "n": 248,
+   "ex": 70.6,
+   "errors": 11
+  },
+  "medium": {
+   "n": 440,
+   "ex": 59.8,
+   "errors": 37
+  },
+  "hard": {
+   "n": 177,
+   "ex": 51.4,
+   "errors": 16
+  },
+  "extra": {
+   "n": 169,
+   "ex": 39.1,
+   "errors": 31
+  }
+ },
+ "plan": {
+  "n": 1034,
+  "table_f1": 89.8,
+  "table_exact": 78.0,
+  "flag_acc": 96.1,
+  "ex_when_tables_right": 67.3,
+  "ex_when_tables_wrong": 22.9
+ }
+}

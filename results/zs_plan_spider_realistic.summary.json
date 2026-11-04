@@ -1,0 +1,37 @@
+{
+ "file": "preds/p3/zs_plan_spider_realistic.jsonl",
+ "n": 508,
+ "ex": 30.3,
+ "errors": 130,
+ "gold_errors": 0,
+ "by_hardness": {
+  "medium": {
+   "n": 203,
+   "ex": 37.4,
+   "errors": 44
+  },
+  "easy": {
+   "n": 109,
+   "ex": 42.2,
+   "errors": 24
+  },
+  "hard": {
+   "n": 99,
+   "ex": 22.2,
+   "errors": 27
+  },
+  "extra": {
+   "n": 97,
+   "ex": 10.3,
+   "errors": 35
+  }
+ },
+ "plan": {
+  "n": 508,
+  "table_f1": 68.4,
+  "table_exact": 15.9,
+  "flag_acc": 45.8,
+  "ex_when_tables_right": 45.7,
+  "ex_when_tables_wrong": 27.4
+ }
+}

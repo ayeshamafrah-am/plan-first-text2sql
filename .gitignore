@@ -1,0 +1,8 @@
+venv/
+data/
+ckpt/
+preds/
+evalsuite/
+__pycache__/
+*.zip
+*.sqlite

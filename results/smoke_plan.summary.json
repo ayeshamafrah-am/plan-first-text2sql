@@ -1,0 +1,32 @@
+{
+ "file": "preds/p3/smoke_plan.jsonl",
+ "n": 20,
+ "ex": 45.0,
+ "errors": 5,
+ "gold_errors": 0,
+ "by_hardness": {
+  "easy": {
+   "n": 4,
+   "ex": 50.0,
+   "errors": 0
+  },
+  "medium": {
+   "n": 14,
+   "ex": 50.0,
+   "errors": 4
+  },
+  "hard": {
+   "n": 2,
+   "ex": 0.0,
+   "errors": 1
+  }
+ },
+ "plan": {
+  "n": 20,
+  "table_f1": 58.8,
+  "table_exact": 20.0,
+  "flag_acc": 0.0,
+  "ex_when_tables_right": 100.0,
+  "ex_when_tables_wrong": 31.2
+ }
+}

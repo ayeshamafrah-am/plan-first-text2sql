@@ -1,0 +1,29 @@
+{
+ "file": "preds/p3/zs_direct_spider_realistic.jsonl",
+ "n": 508,
+ "ex": 49.0,
+ "errors": 82,
+ "gold_errors": 0,
+ "by_hardness": {
+  "medium": {
+   "n": 203,
+   "ex": 53.7,
+   "errors": 29
+  },
+  "easy": {
+   "n": 109,
+   "ex": 65.1,
+   "errors": 8
+  },
+  "hard": {
+   "n": 99,
+   "ex": 41.4,
+   "errors": 21
+  },
+  "extra": {
+   "n": 97,
+   "ex": 28.9,
+   "errors": 24
+  }
+ }
+}

@@ -1,0 +1,29 @@
+{
+ "file": "preds/p3/A_direct_spider_dk.jsonl",
+ "n": 534,
+ "ex": 56.2,
+ "errors": 46,
+ "gold_errors": 0,
+ "by_hardness": {
+  "easy": {
+   "n": 110,
+   "ex": 76.4,
+   "errors": 0
+  },
+  "medium": {
+   "n": 245,
+   "ex": 57.6,
+   "errors": 15
+  },
+  "hard": {
+   "n": 74,
+   "ex": 50.0,
+   "errors": 3
+  },
+  "extra": {
+   "n": 105,
+   "ex": 36.2,
+   "errors": 28
+  }
+ }
+}

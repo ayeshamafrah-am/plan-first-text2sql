@@ -1,0 +1,37 @@
+{
+ "file": "preds/p3/C_plan_curr_spider_dev.jsonl",
+ "n": 1034,
+ "ex": 43.0,
+ "errors": 139,
+ "gold_errors": 0,
+ "by_hardness": {
+  "easy": {
+   "n": 248,
+   "ex": 45.2,
+   "errors": 25
+  },
+  "medium": {
+   "n": 446,
+   "ex": 42.6,
+   "errors": 44
+  },
+  "hard": {
+   "n": 174,
+   "ex": 50.0,
+   "errors": 34
+  },
+  "extra": {
+   "n": 166,
+   "ex": 33.7,
+   "errors": 36
+  }
+ },
+ "plan": {
+  "n": 1034,
+  "table_f1": 89.7,
+  "table_exact": 69.1,
+  "flag_acc": 79.7,
+  "ex_when_tables_right": 50.0,
+  "ex_when_tables_wrong": 27.5
+ }
+}

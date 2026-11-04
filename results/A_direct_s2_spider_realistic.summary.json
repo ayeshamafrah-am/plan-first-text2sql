@@ -1,0 +1,29 @@
+{
+ "file": "preds/p3/A_direct_s2_spider_realistic.jsonl",
+ "n": 508,
+ "ex": 61.0,
+ "errors": 42,
+ "gold_errors": 0,
+ "by_hardness": {
+  "medium": {
+   "n": 203,
+   "ex": 65.5,
+   "errors": 11
+  },
+  "easy": {
+   "n": 109,
+   "ex": 78.9,
+   "errors": 4
+  },
+  "hard": {
+   "n": 99,
+   "ex": 56.6,
+   "errors": 10
+  },
+  "extra": {
+   "n": 97,
+   "ex": 36.1,
+   "errors": 17
+  }
+ }
+}

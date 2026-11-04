@@ -1,0 +1,24 @@
+{
+ "file": "preds/p3/A_direct_s3_bird_dev.jsonl",
+ "n": 1533,
+ "ex": 36.9,
+ "errors": 248,
+ "gold_errors": 1,
+ "by_hardness": {
+  "simple": {
+   "n": 925,
+   "ex": 44.9,
+   "errors": 114
+  },
+  "moderate": {
+   "n": 464,
+   "ex": 26.5,
+   "errors": 89
+  },
+  "challenging": {
+   "n": 144,
+   "ex": 19.4,
+   "errors": 45
+  }
+ }
+}

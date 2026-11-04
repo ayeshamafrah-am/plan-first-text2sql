@@ -1,0 +1,80 @@
+E1/E2 zero-shot 2026-10-28  zs_direct_bird_dev.jsonl                   EX  21.1  (n=1533, non-exec=592)  simple=28.2  moderate=10.3  challenging=9.7
+E1/E2 zero-shot 2026-10-28  zs_direct_spider_dev.jsonl                 EX  57.1  (n=1034, non-exec=132)  easy=81.5  medium=59.2  hard=42.0  extra=30.7
+E1/E2 zero-shot 2026-10-28  zs_direct_spider_dk.jsonl                  EX  45.5  (n=534, non-exec=69)  easy=67.3  medium=44.1  hard=33.8  extra=34.3
+E1/E2 zero-shot 2026-10-28  zs_direct_spider_realistic.jsonl           EX  49.0  (n=508, non-exec=82)  easy=65.1  medium=53.7  hard=41.4  extra=28.9
+E1/E2 zero-shot 2026-10-28  zs_direct_spider_syn.jsonl                 EX  47.9  (n=1034, non-exec=154)  easy=71.4  medium=48.4  hard=37.3  extra=23.1
+E1/E2 zero-shot 2026-10-28  zs_plan_bird_dev.jsonl                     EX  17.8  (n=1533, non-exec=636)  simple=24.3  moderate=9.3  challenging=3.5  | plan: tables-F1 70.9, flags 41.5, EX tables right/wrong 31.0/13.7
+E1/E2 zero-shot 2026-10-28  zs_plan_spider_dev.jsonl                   EX  41.0  (n=1034, non-exec=185)  easy=63.3  medium=46.4  hard=20.7  extra=14.5  | plan: tables-F1 69.3, flags 44.1, EX tables right/wrong 52.2/37.9
+E1/E2 zero-shot 2026-10-28  zs_plan_spider_dk.jsonl                    EX  34.1  (n=534, non-exec=119)  easy=53.6  medium=38.4  hard=10.8  extra=20.0  | plan: tables-F1 68.4, flags 46.2, EX tables right/wrong 41.5/32.0
+E1/E2 zero-shot 2026-10-28  zs_plan_spider_realistic.jsonl             EX  30.3  (n=508, non-exec=130)  easy=42.2  medium=37.4  hard=22.2  extra=10.3  | plan: tables-F1 68.4, flags 45.8, EX tables right/wrong 45.7/27.4
+E1/E2 zero-shot 2026-10-28  zs_plan_spider_syn.jsonl                   EX  28.7  (n=1034, non-exec=242)  easy=44.8  medium=32.3  hard=13.6  extra=11.8  | plan: tables-F1 65.2, flags 46.0, EX tables right/wrong 42.6/26.4
+E3-E6 SFT 2026-10-29  A_direct_bird_dev.jsonl                    EX  36.7  (n=1533, non-exec=232)  simple=44.8  moderate=25.2  challenging=21.5
+E3-E6 SFT 2026-10-29  A_direct_spider_dev.jsonl                  EX  70.1  (n=1034, non-exec=69)  easy=88.3  medium=71.5  hard=61.5  extra=48.2
+E3-E6 SFT 2026-10-29  A_direct_spider_dk.jsonl                   EX  56.2  (n=534, non-exec=46)  easy=76.4  medium=57.6  hard=50.0  extra=36.2
+E3-E6 SFT 2026-10-29  A_direct_spider_realistic.jsonl            EX  61.2  (n=508, non-exec=36)  easy=74.3  medium=67.0  hard=54.5  extra=41.2
+E3-E6 SFT 2026-10-29  A_direct_spider_syn.jsonl                  EX  56.5  (n=1034, non-exec=127)  easy=75.0  medium=57.0  hard=48.6  extra=36.1
+E3-E6 SFT 2026-10-29  B_plan_bird_dev.jsonl                      EX  37.7  (n=1533, non-exec=179)  simple=45.4  moderate=26.7  challenging=23.6  | plan: tables-F1 90.1, flags 94.5, EX tables right/wrong 47.9/11.4
+E3-E6 SFT 2026-10-29  B_plan_spider_dev.jsonl                    EX  71.9  (n=1034, non-exec=38)  easy=87.1  medium=75.8  hard=63.8  extra=47.0  | plan: tables-F1 95.5, flags 96.9, EX tables right/wrong 78.0/30.6
+E3-E6 SFT 2026-10-29  B_plan_spider_dk.jsonl                     EX  56.0  (n=534, non-exec=33)  easy=67.3  medium=59.2  hard=51.4  extra=40.0  | plan: tables-F1 91.7, flags 96.0, EX tables right/wrong 64.8/26.2
+E3-E6 SFT 2026-10-29  B_plan_spider_realistic.jsonl              EX  59.3  (n=508, non-exec=28)  easy=71.6  medium=64.5  hard=55.6  extra=38.1  | plan: tables-F1 93.8, flags 96.5, EX tables right/wrong 65.3/29.9
+E3-E6 SFT 2026-10-29  B_plan_spider_syn.jsonl                    EX  59.1  (n=1034, non-exec=61)  easy=73.4  medium=59.8  hard=53.7  extra=42.0  | plan: tables-F1 90.0, flags 96.0, EX tables right/wrong 70.0/19.4
+E3-E6 SFT 2026-10-29  C_plan_curr_bird_dev.jsonl                 EX  30.9  (n=1533, non-exec=219)  simple=36.1  moderate=22.6  challenging=24.3  | plan: tables-F1 87.1, flags 82.3, EX tables right/wrong 41.0/16.5
+E3-E6 SFT 2026-10-29  C_plan_curr_spider_dev.jsonl               EX  43.0  (n=1034, non-exec=139)  easy=45.2  medium=42.6  hard=50.0  extra=33.7  | plan: tables-F1 89.7, flags 79.7, EX tables right/wrong 50.0/27.5
+E3-E6 SFT 2026-10-29  C_plan_curr_spider_dk.jsonl                EX  32.2  (n=534, non-exec=96)  easy=40.9  medium=32.2  hard=29.7  extra=24.8  | plan: tables-F1 88.7, flags 78.7, EX tables right/wrong 35.7/24.9
+E3-E6 SFT 2026-10-29  C_plan_curr_spider_realistic.jsonl         EX  38.0  (n=508, non-exec=82)  easy=45.0  medium=38.9  hard=41.4  extra=24.7  | plan: tables-F1 87.5, flags 80.1, EX tables right/wrong 47.0/22.5
+E3-E6 SFT 2026-10-29  C_plan_curr_spider_syn.jsonl               EX  33.1  (n=1034, non-exec=147)  easy=31.0  medium=33.0  hard=34.5  extra=34.9  | plan: tables-F1 84.4, flags 79.7, EX tables right/wrong 41.1/22.3
+E3-E6 SFT 2026-10-29  D_direct_curr_bird_dev.jsonl               EX  28.0  (n=1533, non-exec=309)  simple=31.4  moderate=22.2  challenging=25.0
+E3-E6 SFT 2026-10-29  D_direct_curr_spider_dev.jsonl             EX  45.0  (n=1034, non-exec=116)  easy=41.5  medium=43.5  hard=57.5  extra=41.0
+E3-E6 SFT 2026-10-29  D_direct_curr_spider_dk.jsonl              EX  39.7  (n=534, non-exec=76)  easy=44.5  medium=41.6  hard=35.1  extra=33.3
+E3-E6 SFT 2026-10-29  D_direct_curr_spider_realistic.jsonl       EX  36.8  (n=508, non-exec=61)  easy=32.1  medium=36.9  hard=49.5  extra=28.9
+E3-E6 SFT 2026-10-29  D_direct_curr_spider_syn.jsonl             EX  32.2  (n=1034, non-exec=203)  easy=29.4  medium=30.5  hard=42.4  extra=30.2
+E7-E8 competence 2026-10-29  E_plan_comp_bird_dev.jsonl                 EX  34.1  (n=1533, non-exec=241)  simple=42.6  moderate=23.9  challenging=11.8  | plan: tables-F1 89.1, flags 93.5, EX tables right/wrong 45.4/7.4
+E7-E8 competence 2026-10-29  E_plan_comp_spider_dev.jsonl               EX  65.3  (n=1034, non-exec=84)  easy=85.1  medium=73.1  hard=52.3  extra=28.3  | plan: tables-F1 95.1, flags 95.1, EX tables right/wrong 71.3/28.3
+E7-E8 competence 2026-10-29  E_plan_comp_spider_dk.jsonl                EX  50.4  (n=534, non-exec=65)  easy=70.0  medium=55.9  hard=33.8  extra=28.6  | plan: tables-F1 91.9, flags 94.3, EX tables right/wrong 57.7/24.1
+E7-E8 competence 2026-10-29  E_plan_comp_spider_realistic.jsonl         EX  54.3  (n=508, non-exec=36)  easy=67.9  medium=66.5  hard=43.4  extra=24.7  | plan: tables-F1 93.1, flags 95.4, EX tables right/wrong 59.1/32.2
+E7-E8 competence 2026-10-29  E_plan_comp_spider_syn.jsonl               EX  51.7  (n=1034, non-exec=107)  easy=68.1  medium=57.0  hard=42.9  extra=23.1  | plan: tables-F1 88.8, flags 94.4, EX tables right/wrong 63.0/15.2
+E7-E8 competence 2026-10-29  F_direct_comp_bird_dev.jsonl               EX  32.7  (n=1533, non-exec=361)  simple=40.9  moderate=21.6  challenging=16.0
+E7-E8 competence 2026-10-29  F_direct_comp_spider_dev.jsonl             EX  62.1  (n=1034, non-exec=115)  easy=87.1  medium=66.4  hard=56.3  extra=19.3
+E7-E8 competence 2026-10-29  F_direct_comp_spider_dk.jsonl              EX  50.6  (n=534, non-exec=60)  easy=73.6  medium=53.9  hard=39.2  extra=26.7
+E7-E8 competence 2026-10-29  F_direct_comp_spider_realistic.jsonl       EX  52.4  (n=508, non-exec=76)  easy=76.1  medium=58.1  hard=44.4  extra=21.6
+E7-E8 competence 2026-10-29  F_direct_comp_spider_syn.jsonl             EX  51.1  (n=1034, non-exec=169)  easy=76.2  medium=51.8  hard=43.5  extra=20.1
+E11 oracle-plan 2026-10-30  O_oracle_plan_bird_dev.jsonl               EX  56.8  (n=1533, non-exec=94)  simple=65.2  moderate=45.0  challenging=40.3  | plan: tables-F1 100.0, flags 100.0, EX tables right/wrong 56.7/0.0
+E11 oracle-plan 2026-10-30  O_oracle_plan_spider_dev.jsonl             EX  81.9  (n=1034, non-exec=18)  easy=92.3  medium=81.4  hard=79.3  extra=70.5  | plan: tables-F1 100.0, flags 100.0, EX tables right/wrong 81.9/0.0
+E11 oracle-plan 2026-10-30  O_oracle_plan_spider_dk.jsonl              EX  67.0  (n=534, non-exec=18)  easy=74.5  medium=69.4  hard=63.5  extra=56.2  | plan: tables-F1 100.0, flags 100.0, EX tables right/wrong 67.0/0.0
+E11 oracle-plan 2026-10-30  O_oracle_plan_spider_realistic.jsonl       EX  71.7  (n=508, non-exec=16)  easy=78.9  medium=71.4  hard=68.7  extra=67.0  | plan: tables-F1 100.0, flags 100.0, EX tables right/wrong 71.7/0.0
+E11 oracle-plan 2026-10-30  O_oracle_plan_spider_syn.jsonl             EX  74.1  (n=1034, non-exec=50)  easy=89.5  medium=73.0  hard=65.5  extra=63.3  | plan: tables-F1 100.0, flags 100.0, EX tables right/wrong 74.1/0.0
+E9-E10 seeds 2026-10-30  A_direct_s2_bird_dev.jsonl                 EX  36.6  (n=1533, non-exec=243)  simple=44.3  moderate=26.5  challenging=19.4
+E9-E10 seeds 2026-10-30  A_direct_s2_spider_dev.jsonl               EX  69.5  (n=1034, non-exec=78)  easy=89.5  medium=71.7  hard=63.2  extra=40.4
+E9-E10 seeds 2026-10-30  A_direct_s2_spider_dk.jsonl                EX  56.0  (n=534, non-exec=46)  easy=74.5  medium=58.4  hard=45.9  extra=38.1
+E9-E10 seeds 2026-10-30  A_direct_s2_spider_realistic.jsonl         EX  61.0  (n=508, non-exec=42)  easy=78.9  medium=65.5  hard=56.6  extra=36.1
+E9-E10 seeds 2026-10-30  A_direct_s2_spider_syn.jsonl               EX  55.6  (n=1034, non-exec=136)  easy=73.4  medium=54.8  hard=53.1  extra=34.3
+E9-E10 seeds 2026-10-30  A_direct_s3_bird_dev.jsonl                 EX  36.9  (n=1533, non-exec=248)  simple=44.9  moderate=26.5  challenging=19.4
+E9-E10 seeds 2026-10-30  A_direct_s3_spider_dev.jsonl               EX  69.4  (n=1034, non-exec=74)  easy=89.5  medium=68.8  hard=63.2  extra=47.6
+E9-E10 seeds 2026-10-30  A_direct_s3_spider_dk.jsonl                EX  56.2  (n=534, non-exec=53)  easy=73.6  medium=59.2  hard=48.6  extra=36.2
+E9-E10 seeds 2026-10-30  A_direct_s3_spider_realistic.jsonl         EX  61.8  (n=508, non-exec=45)  easy=78.0  medium=66.0  hard=56.6  extra=40.2
+E9-E10 seeds 2026-10-30  A_direct_s3_spider_syn.jsonl               EX  54.8  (n=1034, non-exec=154)  easy=73.8  medium=54.1  hard=48.6  extra=35.5
+E9-E10 seeds 2026-10-30  B_plan_s2_bird_dev.jsonl                   EX  38.7  (n=1533, non-exec=177)  simple=47.2  moderate=27.6  challenging=19.4  | plan: tables-F1 89.9, flags 95.0, EX tables right/wrong 50.0/9.7
+E9-E10 seeds 2026-10-30  B_plan_s2_spider_dev.jsonl                 EX  72.3  (n=1034, non-exec=32)  easy=87.1  medium=76.0  hard=64.9  extra=48.2  | plan: tables-F1 95.6, flags 96.9, EX tables right/wrong 77.2/39.1
+E9-E10 seeds 2026-10-30  B_plan_s2_spider_dk.jsonl                  EX  54.9  (n=534, non-exec=37)  easy=70.9  medium=57.6  hard=47.3  extra=37.1  | plan: tables-F1 92.1, flags 96.0, EX tables right/wrong 61.6/28.0
+E9-E10 seeds 2026-10-30  B_plan_s2_spider_realistic.jsonl           EX  61.4  (n=508, non-exec=28)  easy=74.3  medium=67.5  hard=56.6  extra=39.2  | plan: tables-F1 93.7, flags 96.7, EX tables right/wrong 67.2/33.3
+E9-E10 seeds 2026-10-30  B_plan_s2_spider_syn.jsonl                 EX  59.6  (n=1034, non-exec=69)  easy=76.2  medium=59.1  hard=54.8  extra=41.4  | plan: tables-F1 89.4, flags 96.3, EX tables right/wrong 70.6/21.6
+E9-E10 seeds 2026-10-30  B_plan_s3_bird_dev.jsonl                   EX  39.2  (n=1533, non-exec=182)  simple=47.9  moderate=26.5  challenging=24.3  | plan: tables-F1 90.6, flags 95.0, EX tables right/wrong 48.8/13.1
+E9-E10 seeds 2026-10-30  B_plan_s3_spider_dev.jsonl                 EX  70.2  (n=1034, non-exec=64)  easy=85.5  medium=74.2  hard=60.3  extra=47.0  | plan: tables-F1 95.6, flags 97.0, EX tables right/wrong 75.9/32.6
+E9-E10 seeds 2026-10-30  B_plan_s3_spider_dk.jsonl                  EX  54.9  (n=534, non-exec=56)  easy=67.3  medium=59.6  hard=47.3  extra=36.2  | plan: tables-F1 92.8, flags 96.0, EX tables right/wrong 61.5/28.7
+E9-E10 seeds 2026-10-30  B_plan_s3_spider_realistic.jsonl           EX  59.4  (n=508, non-exec=44)  easy=74.3  medium=66.5  hard=53.5  extra=34.0  | plan: tables-F1 94.1, flags 96.7, EX tables right/wrong 65.2/30.1
+E9-E10 seeds 2026-10-30  B_plan_s3_spider_syn.jsonl                 EX  57.5  (n=1034, non-exec=95)  easy=70.6  medium=59.8  hard=51.4  extra=39.1  | plan: tables-F1 89.8, flags 96.1, EX tables right/wrong 67.3/22.9
+E12 plan-vote 2026-10-31  V_B_plan_bird_dev.jsonl                    EX  37.8  (n=1533, non-exec=176)  simple=45.3  moderate=27.6  challenging=22.2  | plan: tables-F1 90.3, flags 94.4, EX tables right/wrong 47.5/11.9
+E12 plan-vote 2026-10-31  V_B_plan_spider_dev.jsonl                  EX  72.1  (n=1034, non-exec=41)  easy=87.1  medium=76.5  hard=64.4  extra=45.8  | plan: tables-F1 95.6, flags 97.0, EX tables right/wrong 78.0/31.6
+E12 plan-vote 2026-10-31  V_B_plan_spider_dk.jsonl                   EX  56.6  (n=534, non-exec=34)  easy=66.4  medium=60.4  hard=51.4  extra=41.0  | plan: tables-F1 91.9, flags 96.0, EX tables right/wrong 64.9/27.1
+E12 plan-vote 2026-10-31  V_B_plan_spider_realistic.jsonl            EX  60.2  (n=508, non-exec=26)  easy=73.4  medium=65.5  hard=55.6  extra=39.2  | plan: tables-F1 93.6, flags 96.6, EX tables right/wrong 66.5/29.9
+E12 plan-vote 2026-10-31  V_B_plan_spider_syn.jsonl                  EX  59.4  (n=1034, non-exec=59)  easy=73.4  medium=60.2  hard=54.2  extra=42.0  | plan: tables-F1 89.8, flags 95.8, EX tables right/wrong 71.0/18.4
+E12 plan-vote 2026-10-31  V_B_plan_s2_bird_dev.jsonl                 EX  38.7  (n=1533, non-exec=179)  simple=47.2  moderate=28.0  challenging=18.8  | plan: tables-F1 89.9, flags 94.9, EX tables right/wrong 49.5/10.7
+E12 plan-vote 2026-10-31  V_B_plan_s2_spider_dev.jsonl               EX  72.1  (n=1034, non-exec=42)  easy=87.1  medium=76.0  hard=62.6  extra=48.8  | plan: tables-F1 95.8, flags 97.0, EX tables right/wrong 77.0/37.7
+E12 plan-vote 2026-10-31  V_B_plan_s2_spider_dk.jsonl                EX  55.4  (n=534, non-exec=36)  easy=70.0  medium=58.8  hard=48.6  extra=37.1  | plan: tables-F1 92.1, flags 96.3, EX tables right/wrong 62.8/26.6
+E12 plan-vote 2026-10-31  V_B_plan_s2_spider_realistic.jsonl         EX  61.2  (n=508, non-exec=29)  easy=75.2  medium=67.0  hard=56.6  extra=38.1  | plan: tables-F1 94.0, flags 96.8, EX tables right/wrong 66.8/33.7
+E12 plan-vote 2026-10-31  V_B_plan_s2_spider_syn.jsonl               EX  59.5  (n=1034, non-exec=72)  easy=76.2  medium=58.6  hard=54.8  extra=42.0  | plan: tables-F1 89.6, flags 96.3, EX tables right/wrong 70.1/22.3
+E12 plan-vote 2026-10-31  V_B_plan_s3_bird_dev.jsonl                 EX  39.3  (n=1533, non-exec=193)  simple=48.0  moderate=26.9  challenging=23.6  | plan: tables-F1 90.8, flags 95.0, EX tables right/wrong 48.6/13.3
+E12 plan-vote 2026-10-31  V_B_plan_s3_spider_dev.jsonl               EX  69.9  (n=1034, non-exec=61)  easy=85.9  medium=73.8  hard=60.9  extra=45.2  | plan: tables-F1 95.4, flags 96.9, EX tables right/wrong 75.8/32.1
+E12 plan-vote 2026-10-31  V_B_plan_s3_spider_dk.jsonl                EX  53.9  (n=534, non-exec=58)  easy=66.4  medium=58.4  hard=47.3  extra=35.2  | plan: tables-F1 92.5, flags 96.0, EX tables right/wrong 60.5/28.8
+E12 plan-vote 2026-10-31  V_B_plan_s3_spider_realistic.jsonl         EX  58.7  (n=508, non-exec=46)  easy=73.4  medium=65.5  hard=52.5  extra=34.0  | plan: tables-F1 93.9, flags 96.7, EX tables right/wrong 64.8/28.7
+E12 plan-vote 2026-10-31  V_B_plan_s3_spider_syn.jsonl               EX  57.5  (n=1034, non-exec=92)  easy=70.2  medium=59.5  hard=52.5  extra=39.1  | plan: tables-F1 90.2, flags 96.2, EX tables right/wrong 66.9/23.4

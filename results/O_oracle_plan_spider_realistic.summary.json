@@ -1,0 +1,37 @@
+{
+ "file": "preds/p3/O_oracle_plan_spider_realistic.jsonl",
+ "n": 508,
+ "ex": 71.7,
+ "errors": 16,
+ "gold_errors": 0,
+ "by_hardness": {
+  "medium": {
+   "n": 203,
+   "ex": 71.4,
+   "errors": 6
+  },
+  "easy": {
+   "n": 109,
+   "ex": 78.9,
+   "errors": 5
+  },
+  "hard": {
+   "n": 99,
+   "ex": 68.7,
+   "errors": 5
+  },
+  "extra": {
+   "n": 97,
+   "ex": 67.0,
+   "errors": 0
+  }
+ },
+ "plan": {
+  "n": 508,
+  "table_f1": 100.0,
+  "table_exact": 100.0,
+  "flag_acc": 100.0,
+  "ex_when_tables_right": 71.7,
+  "ex_when_tables_wrong": 0.0
+ }
+}

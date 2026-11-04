@@ -1,0 +1,32 @@
+{
+ "file": "preds/p3/B_plan_s3_bird_dev.jsonl",
+ "n": 1533,
+ "ex": 39.2,
+ "errors": 182,
+ "gold_errors": 1,
+ "by_hardness": {
+  "simple": {
+   "n": 925,
+   "ex": 47.9,
+   "errors": 82
+  },
+  "moderate": {
+   "n": 464,
+   "ex": 26.5,
+   "errors": 75
+  },
+  "challenging": {
+   "n": 144,
+   "ex": 24.3,
+   "errors": 25
+  }
+ },
+ "plan": {
+  "n": 1534,
+  "table_f1": 90.6,
+  "table_exact": 73.1,
+  "flag_acc": 95.0,
+  "ex_when_tables_right": 48.8,
+  "ex_when_tables_wrong": 13.1
+ }
+}

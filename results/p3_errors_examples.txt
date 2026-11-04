@@ -1,0 +1,1104 @@
+[A_direct | spider_dev | wrong details]
+Q: Show the name and the release year of the song by the youngest singer.
+GOLD: SELECT song_name ,  song_release_year FROM singer ORDER BY age LIMIT 1
+PRED: SELECT name , song_release_year FROM singer ORDER BY age LIMIT 1
+
+[A_direct | spider_dev | wrong aggregate]
+Q: What is the maximum capacity and the average of all stadiums ?
+GOLD: select max(capacity), average from stadium
+PRED: SELECT max(capacity) , avg(capacity) FROM stadium
+
+[A_direct | spider_dev | wrong details]
+Q: For each stadium, how many concerts play there?
+GOLD: SELECT T2.name ,  count(*) FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id GROUP BY T1.stadium_id
+PRED: SELECT count(*) , T1.stadium_id FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id = T2.stadium_id GROUP BY T1.stadium_id
+
+[A_direct | spider_dev | wrong grouping]
+Q: What is the name and capacity of the stadium with the most concerts after 2013 ?
+GOLD: select t2.name ,  t2.capacity from concert as t1 join stadium as t2 on t1.stadium_id  =  t2.stadium_id where t1.year  >  2013 group by t2.stadium_id order by count(*) desc limit 1
+PRED: SELECT T1.name , T1.capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.stadium_id = T2.stadium_id WHERE T2.year > 2013 GROUP BY T1.stadium_id HAVING count(*) > 2
+
+[A_direct | spider_dev | exec:no-such-column]
+Q: Show the name and theme for all concerts and the number of singers in each concert.
+GOLD: SELECT T2.concert_name ,  T2.theme ,  count(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.concert_id  =  T2.concert_id GROUP BY T2.concert_id
+PRED: SELECT T1.concert_name , count(*) , T2.theme FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_id = T2.concert_id GROUP BY T1.concert_name
+
+[A_direct | spider_dev | wrong details]
+Q: What are the names , themes , and number of singers for every concert ?
+GOLD: select t2.concert_name ,  t2.theme ,  count(*) from singer_in_concert as t1 join concert as t2 on t1.concert_id  =  t2.concert_id group by t2.concert_id
+PRED: SELECT T1.concert_name , T1.theme , count(*) FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_id = T2.concert_id GROUP BY T1.concert_name
+
+[A_direct | spider_dev | exec:no-such-column]
+Q: List all singer names in concerts in year 2014.
+GOLD: SELECT T2.name FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id JOIN concert AS T3 ON T1.concert_id  =  T3.concert_id WHERE T3.year  =  2014
+PRED: SELECT T2.Name FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_id = T2.concert_id WHERE T1.year = 2014
+
+[A_direct | spider_dev | exec:no-such-column]
+Q: What are the names of the singers who performed in a concert in 2014?
+GOLD: SELECT T2.name FROM singer_in_concert AS T1 JOIN singer AS T2 ON T1.singer_id  =  T2.singer_id JOIN concert AS T3 ON T1.concert_id  =  T3.concert_id WHERE T3.year  =  2014
+PRED: SELECT T2.Name FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_ID = T2.concert_ID WHERE T1.Year = 2014
+
+[A_direct | spider_dev | wrong nesting/set op]
+Q: Find the major and age of students who do not have a cat pet.
+GOLD: SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT major , age FROM student EXCEPT SELECT T1.major , T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid = T2.stuid JOIN pets AS T3 ON T2.petid = T3.petid WHERE T3.pettype = "cat"
+
+[A_direct | spider_dev | wrong tables]
+Q: Find the id of students who do not have a cat pet.
+GOLD: SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'
+PRED: SELECT StuID FROM Has_Pet EXCEPT SELECT StuID FROM Has_Pet WHERE PetID = (SELECT PetID FROM Pets WHERE PetType = "Cat")
+
+[A_direct | spider_dev | wrong tables]
+Q: What are the ids of the students who do not own cats as pets?
+GOLD: SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'
+PRED: SELECT StuID FROM Has_Pet EXCEPT SELECT StuID FROM Has_Pet WHERE PetID IN (SELECT PetID FROM Pets WHERE PetType = "Cat")
+
+[A_direct | spider_dev | wrong nesting/set op]
+Q: Find the first name and age of students who have a dog but do not have a cat as a pet.
+GOLD: SELECT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'dog' AND T1.stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT T1.fname , T1.age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.stuid = T2.stuid JOIN Pets AS T3 ON T2.petid = T3.petid WHERE T3.pettype = "dog" EXCEPT SELECT T1.fname , T1.age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.stuid = T2.stuid JOIN Pets AS T3 ON T2.petid = T3.petid WHERE T3.pettype = "cat"
+
+[A_direct | spider_dev | wrong nesting/set op]
+Q: What is the first name of every student who has a dog but does not have a cat?
+GOLD: SELECT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'dog' AND T1.stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT DISTINCT T1.fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid = T2.stuid JOIN pets AS T3 ON T2.petid = T3.petid WHERE T3.pettype = "dog" EXCEPT SELECT DISTINCT T1.fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid = T2.stuid JOIN pets AS T3 ON T2.petid = T3.petid WHERE T3.pettype = "cat"
+
+[A_direct | spider_dev | wrong tables]
+Q: For students who have pets , how many pets does each student have ? list their ids instead of names .
+GOLD: select count(*) ,  t1.stuid from student as t1 join has_pet as t2 on t1.stuid  =  t2.stuid group by t1.stuid
+PRED: SELECT StuID , count(*) FROM Has_Pet GROUP BY StuID
+
+[A_direct | spider_dev | wrong grouping]
+Q: What are the countries having at least one car maker? List name and id.
+GOLD: SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;
+PRED: SELECT T1.CountryName , T1.CountryId FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T1.CountryId >= 1
+
+[A_direct | spider_dev | wrong grouping]
+Q: What are the names and ids of all countries with at least one car maker?
+GOLD: SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;
+PRED: SELECT T1.CountryName , T1.CountryId FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T1.CountryId >= 1
+
+[A_direct | spider_dev | wrong ordering/limit]
+Q: How many cars have a larger accelerate than the car with the largest horsepower?
+GOLD: SELECT COUNT(*) FROM CARS_DATA WHERE Accelerate  >  ( SELECT Accelerate FROM CARS_DATA ORDER BY Horsepower DESC LIMIT 1 );
+PRED: SELECT count(*) FROM cars_data WHERE accelerate > (SELECT max(accelerate) FROM cars_data)
+
+[A_direct | spider_dev | wrong ordering/limit]
+Q: What is the number of cars with a greater accelerate than the one with the most horsepower?
+GOLD: SELECT COUNT(*) FROM CARS_DATA WHERE Accelerate  >  ( SELECT Accelerate FROM CARS_DATA ORDER BY Horsepower DESC LIMIT 1 );
+PRED: SELECT count(*) FROM cars_data WHERE accelerate > (SELECT max(accelerate) FROM cars_data)
+
+[A_direct | spider_dev | wrong aggregate]
+Q: Find the highest rank of losers in all matches.
+GOLD: SELECT min(loser_rank) FROM matches
+PRED: SELECT max(loser_rank) FROM matches
+
+[A_direct | spider_dev | wrong aggregate]
+Q: Find the total ranking points for each player and their first name.
+GOLD: SELECT sum(ranking_points) ,  T1.first_name FROM players AS T1 JOIN rankings AS T2 ON T1.player_id  =  T2.player_id GROUP BY T1.first_name
+PRED: SELECT T1.ranking_points , T2.first_name FROM rankings AS T1 JOIN players AS T2 ON T1.player_id = T2.player_id GROUP BY T2.first_name
+
+[A_direct | spider_dev | exec:no-such-table]
+Q: Which department offers the most number of degrees? List department name and id.
+GOLD: SELECT T2.department_name ,  T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id  =  T2.department_id GROUP BY T1.department_id ORDER BY count(*) DESC LIMIT 1
+PRED: SELECT T1.department_name , T1.department_id FROM DEGREES_PROGRAMS AS T1 JOIN DEPARTMENTS AS T2 ON T1.department_id = T2.department_id GROUP BY T1.department_id ORDER BY count(*) DESC LIMIT 1
+
+[A_direct | spider_dev | exec:no-such-table]
+Q: How many degrees does the engineering department offer?
+GOLD: SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id  =  T2.department_id WHERE T1.department_name  =  'engineer'
+PRED: SELECT count(*) FROM DEGREES_PROGRAMS AS T1 JOIN DEPARTMENTS AS T2 ON T1.department_id = T2.department_id WHERE T2.department_name = "Engineering"
+
+[A_direct | spider_dev | exec:no-such-table]
+Q: How many degrees does the engineering department have?
+GOLD: SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id  =  T2.department_id WHERE T1.department_name  =  'engineer'
+PRED: SELECT count(*) FROM DEGREES_programs AS T1 JOIN DEPARTMENTS AS T2 ON T1.department_id = T2.department_id WHERE T2.department_name = "Engineering"
+
+[A_direct | spider_dev | exec:syntax]
+Q: What is the id of the semester that had both Masters and Bachelors students enrolled?
+GOLD: SELECT DISTINCT T2.semester_id FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id WHERE degree_summary_name  =  'Master' INTERSECT SELECT DISTINCT T2.semester_id FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id WHERE degree_summary_name  =  'Bachelor'
+PRED: SELECT T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id = T2.semester_id JOIN Degree_Programs AS T3 ON T2.degree_program_id = T3.degree_program_id WHERE T3.degree_summary_name = 'Master's' INTERSECT SELECT T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id = T2.semester_id JOIN Degree_Programs AS T3 ON T2.degree_program_id = T3.degree_program_id WHERE T3.degree_summary_name = 'Bachelor's'
+
+[A_direct | spider_dev | wrong filter]
+Q: What are the names of countries that speak more than 2 languages, as well as how many languages they speak?
+GOLD: SELECT COUNT(T2.Language) ,  T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode GROUP BY T1.Name HAVING COUNT(*)  >  2
+PRED: SELECT T1.Name , COUNT(*) FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.IsOfficial = 'T' GROUP BY T1.Name HAVING COUNT(*) > 2
+
+[A_direct | spider_dev | exec:other]
+Q: List the names of the dogs of the rarest breed and the treatment dates of them.
+GOLD: SELECT T1.name ,  T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id  =  T2.dog_id WHERE T1.breed_code  =  ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY count(*) ASC LIMIT 1 )
+PRED: SELECT T1.name , T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id JOIN Breeds AS T3 ON T1.breed_code = T3.breed_code WHERE T3.breed_name = (SELECT breed_name FROM Breeds ORDER BY count(*) DESC LIMIT 1)
+
+[A_direct | spider_dev | exec:other]
+Q: Which dogs are of the rarest breed? Show their names and treatment dates.
+GOLD: SELECT T1.name ,  T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id  =  T2.dog_id WHERE T1.breed_code  =  ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY count(*) ASC LIMIT 1 )
+PRED: SELECT T1.name , T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id JOIN Breeds AS T3 ON T1.breed_code = T3.breed_code WHERE T3.breed_name = (SELECT breed_name FROM Breeds ORDER BY count(*) DESC LIMIT 1)
+
+[A_direct | spider_dev | wrong ordering/limit]
+Q: How much does the most recent treatment cost?
+GOLD: SELECT cost_of_treatment FROM Treatments ORDER BY date_of_treatment DESC LIMIT 1
+PRED: SELECT max(cost_of_treatment) FROM Treatments
+
+[B_plan | spider_dev | wrong details]
+Q: Show the name and the release year of the song by the youngest singer.
+GOLD: SELECT song_name ,  song_release_year FROM singer ORDER BY age LIMIT 1
+PRED: SELECT name , song_release_year FROM singer ORDER BY age LIMIT 1
+
+[B_plan | spider_dev | wrong details]
+Q: How many singers are from each country?
+GOLD: SELECT country ,  count(*) FROM singer GROUP BY country
+PRED: SELECT count(*) , Country FROM singer GROUP BY Country
+
+[B_plan | spider_dev | wrong aggregate]
+Q: What is the maximum capacity and the average of all stadiums ?
+GOLD: select max(capacity), average from stadium
+PRED: SELECT max(capacity) , avg(capacity) FROM stadium
+
+[B_plan | spider_dev | wrong tables]
+Q: For each stadium, how many concerts play there?
+GOLD: SELECT T2.name ,  count(*) FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id GROUP BY T1.stadium_id
+PRED: SELECT Stadium_ID , COUNT(*) FROM concert GROUP BY Stadium_ID
+
+[B_plan | spider_dev | wrong grouping]
+Q: What is the name and capacity of the stadium with the most concerts after 2013 ?
+GOLD: select t2.name ,  t2.capacity from concert as t1 join stadium as t2 on t1.stadium_id  =  t2.stadium_id where t1.year  >  2013 group by t2.stadium_id order by count(*) desc limit 1
+PRED: SELECT T1.name , T1.capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.stadium_id = T2.stadium_id WHERE T2.year > 2013 ORDER BY T2.concert_id DESC LIMIT 1
+
+[B_plan | spider_dev | wrong details]
+Q: Show the name and theme for all concerts and the number of singers in each concert.
+GOLD: SELECT T2.concert_name ,  T2.theme ,  count(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.concert_id  =  T2.concert_id GROUP BY T2.concert_id
+PRED: SELECT T1.concert_name , T1.theme , count(*) FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_id = T2.concert_id GROUP BY T1.concert_name
+
+[B_plan | spider_dev | wrong nesting/set op]
+Q: Find the number of concerts happened in the stadium with the highest capacity .
+GOLD: select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)
+PRED: SELECT count(*) FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id = T2.stadium_id
+
+[B_plan | spider_dev | exec:syntax]
+Q: What are the number of concerts that occurred in the stadium with the largest capacity ?
+GOLD: select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)
+PRED: SELECT count(*) FROM stadium WHERE capacity = (SELECT capacity FROM stadium ORDER BY capacity DESC LIMIT 1) JOIN concert ON stadium.stadium_id = concert.stadium_id
+
+[B_plan | spider_dev | wrong nesting/set op]
+Q: Find the major and age of students who do not have a cat pet.
+GOLD: SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT major , age FROM Student EXCEPT SELECT T1.major , T1.age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.pettype = "cat"
+
+[B_plan | spider_dev | wrong nesting/set op]
+Q: What major is every student who does not own a cat as a pet, and also how old are they?
+GOLD: SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT T1.Major , T1.age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.pettype != "Cat"
+
+[B_plan | spider_dev | wrong tables]
+Q: Find the id of students who do not have a cat pet.
+GOLD: SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'
+PRED: SELECT StuID FROM Has_Pet WHERE PetID NOT IN (SELECT PetID FROM Pets WHERE PetType = "Cat")
+
+[B_plan | spider_dev | wrong tables]
+Q: What are the ids of the students who do not own cats as pets?
+GOLD: SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'
+PRED: SELECT StuID FROM Has_Pet WHERE PetID NOT IN (SELECT PetID FROM Pets WHERE PetType = "Cat")
+
+[B_plan | spider_dev | exec:no-such-column]
+Q: Find the model of the car whose weight is below the average weight.
+GOLD: SELECT T1.model FROM CAR_NAMES AS T1 JOIN CARS_DATA AS T2 ON T1.MakeId  =  T2.Id WHERE T2.Weight  <  (SELECT avg(Weight) FROM CARS_DATA)
+PRED: SELECT Model FROM cars_data WHERE Weight < (SELECT avg(Weight) FROM cars_data)
+
+[B_plan | spider_dev | exec:no-such-column]
+Q: Find the name of the makers that produced some cars in the year of 1970?
+GOLD: SELECT DISTINCT T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker JOIN CAR_NAMES AS T3 ON T2.model  =  T3.model JOIN CARS_DATA AS T4 ON T3.MakeId  =  T4.id WHERE T4.year  =  '1970';
+PRED: SELECT T2.Make FROM cars_data AS T1 JOIN car_names AS T2 ON T1.MakeId = T2.MakeId WHERE T1.Year = 1970
+
+[B_plan | spider_dev | exec:no-such-column]
+Q: What is the name of the different car makers who produced a car in 1970?
+GOLD: SELECT DISTINCT T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker JOIN CAR_NAMES AS T3 ON T2.model  =  T3.model JOIN CARS_DATA AS T4 ON T3.MakeId  =  T4.id WHERE T4.year  =  '1970';
+PRED: SELECT DISTINCT T2.Make FROM cars_data AS T1 JOIN car_names AS T2 ON T1.MakeId = T2.MakeId WHERE T1.Year = 1970
+
+[B_plan | spider_dev | wrong grouping]
+Q: What are the countries having at least one car maker? List name and id.
+GOLD: SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;
+PRED: SELECT T2.CountryName , T1.Country FROM car_makers AS T1 JOIN countries AS T2 ON T1.Country = T2.CountryId
+
+[B_plan | spider_dev | exec:other]
+Q: What are the ids of documents that contain the paragraph text 'Brazil' and 'Ireland'?
+GOLD: SELECT document_id FROM Paragraphs WHERE paragraph_text  =  'Brazil' INTERSECT SELECT document_id FROM Paragraphs WHERE paragraph_text  =  'Ireland'
+PRED: SELECT document_id FROM Documents AS T1 JOIN Paragraphs AS T2 ON T1.document_id = T2.document_id WHERE T2.paragraph_text = 'Brazil' INTERSECT SELECT document_id FROM Documents AS T1 JOIN Paragraphs AS T2 ON T1.document_id = T2.document_id WHERE T2.paragraph_text = 'Ireland'
+
+[B_plan | spider_dev | wrong grouping]
+Q: Find the name and age of the visitor who bought the most tickets at once.
+GOLD: SELECT t1.name ,  t1.age FROM visitor AS t1 JOIN visit AS t2 ON t1.id  =  t2.visitor_id ORDER BY t2.num_of_ticket DESC LIMIT 1
+PRED: SELECT T1.Name , T1.Age FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID GROUP BY T1.ID ORDER BY count(*) DESC LIMIT 1
+
+[B_plan | spider_dev | wrong aggregate]
+Q: Find the total number of tours for each ranking date.
+GOLD: SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date
+PRED: SELECT ranking_date , COUNT(*) FROM rankings GROUP BY ranking_date
+
+[B_plan | spider_dev | wrong aggregate]
+Q: How many total tours were there for each ranking date?
+GOLD: SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date
+PRED: SELECT ranking_date , COUNT(*) FROM rankings GROUP BY ranking_date
+
+[B_plan | spider_dev | wrong ordering/limit]
+Q: What language is predominantly spoken in Aruba?
+GOLD: SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  "Aruba" ORDER BY Percentage DESC LIMIT 1
+PRED: SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Name = 'Aruba'
+
+[B_plan | spider_dev | wrong filter]
+Q: Give the total surface area covered by countries in Asia or Europe.
+GOLD: SELECT sum(SurfaceArea) FROM country WHERE Continent  =  "Asia" OR Continent  =  "Europe"
+PRED: SELECT SUM(SurfaceArea) FROM country
+
+[B_plan | spider_dev | wrong ordering/limit]
+Q: What is the language spoken by the largest percentage of people in each country?
+GOLD: SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode
+PRED: SELECT Language FROM countrylanguage GROUP BY Language, CountryCode ORDER BY SUM(Percentage) DESC LIMIT 1
+
+[B_plan | spider_dev | wrong ordering/limit]
+Q: What are the country codes of the different countries, and what are the languages spoken by the greatest percentage of people for each?
+GOLD: SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode
+PRED: SELECT CountryCode , Language FROM countrylanguage GROUP BY CountryCode ORDER BY Percentage DESC LIMIT 1
+
+[B_plan | spider_dev | exec:syntax]
+Q: Which first names are used for professionals or owners but are not used as dog names?
+GOLD: SELECT first_name FROM Professionals UNION SELECT first_name FROM Owners EXCEPT SELECT name FROM Dogs
+PRED: SELECT T1.first_name FROM Owners AS T1 JOIN Professionals AS T2 ON T1.owner_id = T2.owner_id WHERE T1.first_name != T3.name FROM Dogs AS T3 WHERE T3.owner_id = T1.owner_id EXCEPT SELECT T2.first_name FROM Professionals AS T2 JOIN Owners AS T1 ON T1.owner_id = T2.owner_id WHERE T1.first_name != T3.name FROM Dogs AS T3 WHERE T3.owner_id = T1.owner_id
+
+[V_B_plan | spider_dev | wrong details]
+Q: Show the name and the release year of the song by the youngest singer.
+GOLD: SELECT song_name ,  song_release_year FROM singer ORDER BY age LIMIT 1
+PRED: SELECT name , song_release_year FROM singer ORDER BY age LIMIT 1
+
+[V_B_plan | spider_dev | wrong details]
+Q: How many singers are from each country?
+GOLD: SELECT country ,  count(*) FROM singer GROUP BY country
+PRED: SELECT count(*) , Country FROM singer GROUP BY Country
+
+[V_B_plan | spider_dev | wrong aggregate]
+Q: What is the maximum capacity and the average of all stadiums ?
+GOLD: select max(capacity), average from stadium
+PRED: SELECT max(capacity) , avg(capacity) FROM stadium
+
+[V_B_plan | spider_dev | wrong tables]
+Q: For each stadium, how many concerts play there?
+GOLD: SELECT T2.name ,  count(*) FROM concert AS T1 JOIN stadium AS T2 ON T1.stadium_id  =  T2.stadium_id GROUP BY T1.stadium_id
+PRED: SELECT Stadium_ID , COUNT(*) FROM concert GROUP BY Stadium_ID
+
+[V_B_plan | spider_dev | wrong grouping]
+Q: What is the name and capacity of the stadium with the most concerts after 2013 ?
+GOLD: select t2.name ,  t2.capacity from concert as t1 join stadium as t2 on t1.stadium_id  =  t2.stadium_id where t1.year  >  2013 group by t2.stadium_id order by count(*) desc limit 1
+PRED: SELECT T1.name , T1.capacity FROM stadium AS T1 JOIN concert AS T2 ON T1.stadium_id = T2.stadium_id WHERE T2.year > 2013 ORDER BY T2.concert_id DESC LIMIT 1
+
+[V_B_plan | spider_dev | wrong details]
+Q: Show the name and theme for all concerts and the number of singers in each concert.
+GOLD: SELECT T2.concert_name ,  T2.theme ,  count(*) FROM singer_in_concert AS T1 JOIN concert AS T2 ON T1.concert_id  =  T2.concert_id GROUP BY T2.concert_id
+PRED: SELECT T1.concert_name , T1.theme , count(*) FROM concert AS T1 JOIN singer_in_concert AS T2 ON T1.concert_id = T2.concert_id GROUP BY T1.concert_name
+
+[V_B_plan | spider_dev | wrong nesting/set op]
+Q: Find the number of concerts happened in the stadium with the highest capacity .
+GOLD: select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)
+PRED: SELECT count(*) FROM stadium AS T1 JOIN concert AS T2 ON T1.stadium_id = T2.stadium_id
+
+[V_B_plan | spider_dev | exec:syntax]
+Q: What are the number of concerts that occurred in the stadium with the largest capacity ?
+GOLD: select count(*) from concert where stadium_id = (select stadium_id from stadium order by capacity desc limit 1)
+PRED: SELECT count(*) FROM stadium WHERE capacity = (SELECT capacity FROM stadium ORDER BY capacity DESC LIMIT 1) JOIN concert ON stadium.stadium_id = concert.stadium_id
+
+[V_B_plan | spider_dev | wrong nesting/set op]
+Q: Find the major and age of students who do not have a cat pet.
+GOLD: SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT major , age FROM Student EXCEPT SELECT T1.major , T1.age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.pettype = "Cat"
+
+[V_B_plan | spider_dev | wrong nesting/set op]
+Q: What major is every student who does not own a cat as a pet, and also how old are they?
+GOLD: SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT T1.Major , T1.age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T2.PetID = T3.PetID WHERE T3.pettype != "Cat"
+
+[V_B_plan | spider_dev | wrong tables]
+Q: Find the id of students who do not have a cat pet.
+GOLD: SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'
+PRED: SELECT StuID FROM Has_Pet WHERE PetID NOT IN (SELECT PetID FROM Pets WHERE PetType = "Cat")
+
+[V_B_plan | spider_dev | wrong tables]
+Q: What are the ids of the students who do not own cats as pets?
+GOLD: SELECT stuid FROM student EXCEPT SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat'
+PRED: SELECT StuID FROM Has_Pet WHERE PetID NOT IN (SELECT PetID FROM Pets WHERE PetType = "Cat")
+
+[V_B_plan | spider_dev | exec:no-such-table]
+Q: What is the average age for all students who do not own any pets ?
+GOLD: select avg(age) from student where stuid not in (select stuid from has_pet)
+PRED: SELECT avg(age) FROM student WHERE StuID NOT IN (SELECT StuID FROM Has_Pets)
+
+[V_B_plan | spider_dev | exec:no-such-column]
+Q: Find the model of the car whose weight is below the average weight.
+GOLD: SELECT T1.model FROM CAR_NAMES AS T1 JOIN CARS_DATA AS T2 ON T1.MakeId  =  T2.Id WHERE T2.Weight  <  (SELECT avg(Weight) FROM CARS_DATA)
+PRED: SELECT Model FROM cars_data WHERE Weight < (SELECT avg(Weight) FROM cars_data)
+
+[V_B_plan | spider_dev | exec:no-such-column]
+Q: Find the name of the makers that produced some cars in the year of 1970?
+GOLD: SELECT DISTINCT T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker JOIN CAR_NAMES AS T3 ON T2.model  =  T3.model JOIN CARS_DATA AS T4 ON T3.MakeId  =  T4.id WHERE T4.year  =  '1970';
+PRED: SELECT T2.Make FROM cars_data AS T1 JOIN car_names AS T2 ON T1.MakeId = T2.MakeId WHERE T1.Year = 1970
+
+[V_B_plan | spider_dev | exec:no-such-column]
+Q: What is the name of the different car makers who produced a car in 1970?
+GOLD: SELECT DISTINCT T1.Maker FROM CAR_MAKERS AS T1 JOIN MODEL_LIST AS T2 ON T1.Id  =  T2.Maker JOIN CAR_NAMES AS T3 ON T2.model  =  T3.model JOIN CARS_DATA AS T4 ON T3.MakeId  =  T4.id WHERE T4.year  =  '1970';
+PRED: SELECT DISTINCT T2.Make FROM cars_data AS T1 JOIN car_names AS T2 ON T1.MakeId = T2.MakeId WHERE T1.Year = 1970
+
+[V_B_plan | spider_dev | wrong grouping]
+Q: What are the countries having at least one car maker? List name and id.
+GOLD: SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;
+PRED: SELECT T2.CountryName , T1.Country FROM car_makers AS T1 JOIN countries AS T2 ON T1.Country = T2.CountryId
+
+[V_B_plan | spider_dev | exec:other]
+Q: What are the ids of documents that contain the paragraph text 'Brazil' and 'Ireland'?
+GOLD: SELECT document_id FROM Paragraphs WHERE paragraph_text  =  'Brazil' INTERSECT SELECT document_id FROM Paragraphs WHERE paragraph_text  =  'Ireland'
+PRED: SELECT document_id FROM Documents AS T1 JOIN Paragraphs AS T2 ON T1.document_id = T2.document_id WHERE T2.paragraph_text = 'Brazil' INTERSECT SELECT document_id FROM Documents AS T1 JOIN Paragraphs AS T2 ON T1.document_id = T2.document_id WHERE T2.paragraph_text = 'Ireland'
+
+[V_B_plan | spider_dev | wrong grouping]
+Q: Find the name and age of the visitor who bought the most tickets at once.
+GOLD: SELECT t1.name ,  t1.age FROM visitor AS t1 JOIN visit AS t2 ON t1.id  =  t2.visitor_id ORDER BY t2.num_of_ticket DESC LIMIT 1
+PRED: SELECT T1.Name , T1.Age FROM visitor AS T1 JOIN visit AS T2 ON T1.ID = T2.visitor_ID GROUP BY T1.ID ORDER BY count(*) DESC LIMIT 1
+
+[V_B_plan | spider_dev | wrong aggregate]
+Q: Find the total number of tours for each ranking date.
+GOLD: SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date
+PRED: SELECT ranking_date , COUNT(*) FROM rankings GROUP BY ranking_date
+
+[V_B_plan | spider_dev | wrong aggregate]
+Q: How many total tours were there for each ranking date?
+GOLD: SELECT sum(tours) ,  ranking_date FROM rankings GROUP BY ranking_date
+PRED: SELECT ranking_date , COUNT(*) FROM rankings GROUP BY ranking_date
+
+[V_B_plan | spider_dev | wrong ordering/limit]
+Q: What language is predominantly spoken in Aruba?
+GOLD: SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T1.Name  =  "Aruba" ORDER BY Percentage DESC LIMIT 1
+PRED: SELECT T2.Language FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T1.Name = 'Aruba'
+
+[V_B_plan | spider_dev | wrong ordering/limit]
+Q: What is the language spoken by the largest percentage of people in each country?
+GOLD: SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode
+PRED: SELECT Language FROM countrylanguage GROUP BY CountryCode ORDER BY SUM(Percentage) DESC LIMIT 1
+
+[V_B_plan | spider_dev | exec:syntax]
+Q: Which first names are used for professionals or owners but are not used as dog names?
+GOLD: SELECT first_name FROM Professionals UNION SELECT first_name FROM Owners EXCEPT SELECT name FROM Dogs
+PRED: SELECT T1.first_name FROM Owners AS T1 JOIN Professionals AS T2 ON T1.owner_id = T2.owner_id WHERE T1.first_name != T3.name FROM Dogs AS T3 WHERE T3.owner_id = T1.owner_id EXCEPT SELECT T2.first_name FROM Professionals AS T2 JOIN Owners AS T1 ON T1.owner_id = T2.owner_id WHERE T1.first_name != T3.name FROM Dogs AS T3 WHERE T3.owner_id = T1.owner_id
+
+[O_oracle_plan | spider_dev | wrong details]
+Q: Show the name and the release year of the song by the youngest singer.
+GOLD: SELECT song_name ,  song_release_year FROM singer ORDER BY age LIMIT 1
+PRED: SELECT name , song_release_year FROM singer ORDER BY age LIMIT 1
+
+[O_oracle_plan | spider_dev | wrong details]
+Q: How many singers are from each country?
+GOLD: SELECT country ,  count(*) FROM singer GROUP BY country
+PRED: SELECT count(*) , Country FROM singer GROUP BY Country
+
+[O_oracle_plan | spider_dev | wrong details]
+Q: What is the maximum capacity and the average of all stadiums ?
+GOLD: select max(capacity), average from stadium
+PRED: SELECT max(capacity) , max(average) FROM stadium
+
+[O_oracle_plan | spider_dev | wrong nesting/set op]
+Q: What major is every student who does not own a cat as a pet, and also how old are they?
+GOLD: SELECT major ,  age FROM student WHERE stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT T1.major , T1.age FROM Student AS T1 JOIN Has_Pet AS T2 ON T1.StuID = T2.StuID JOIN Pets AS T3 ON T3.PetID = T2.PetID WHERE T3.pettype != "Cat"
+
+[O_oracle_plan | spider_dev | wrong nesting/set op]
+Q: What is the first name of every student who has a dog but does not have a cat?
+GOLD: SELECT T1.fname ,  T1.age FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'dog' AND T1.stuid NOT IN (SELECT T1.stuid FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid  =  T2.stuid JOIN pets AS T3 ON T3.petid  =  T2.petid WHERE T3.pettype  =  'cat')
+PRED: SELECT T1.fname FROM student AS T1 JOIN has_pet AS T2 ON T1.stuid = T2.stuid JOIN pets AS T3 ON T3.petid = T2.petid WHERE T3.pettype = 'dog' AND T3.pettype != 'cat'
+
+[O_oracle_plan | spider_dev | exec:no-such-column]
+Q: What are the countries having at least one car maker? List name and id.
+GOLD: SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;
+PRED: SELECT T1.CountryName , T2.CountryId FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T2.CountryId HAVING COUNT(*) >= 1
+
+[O_oracle_plan | spider_dev | exec:no-such-column]
+Q: What are the names and ids of all countries with at least one car maker?
+GOLD: SELECT T1.CountryName ,  T1.CountryId FROM COUNTRIES AS T1 JOIN CAR_MAKERS AS T2 ON T1.CountryId  =  T2.Country GROUP BY T1.CountryId HAVING count(*)  >=  1;
+PRED: SELECT T1.CountryName , T2.CountryId FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country GROUP BY T2.CountryId HAVING COUNT(*) >= 1
+
+[O_oracle_plan | spider_dev | wrong filter]
+Q: What are the name of the countries where there is not a single car maker?
+GOLD: SELECT CountryName FROM countries EXCEPT SELECT T1.CountryName FROM countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.countryId  =  T2.Country;
+PRED: SELECT CountryName FROM countries EXCEPT SELECT T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Maker = 0
+
+[O_oracle_plan | spider_dev | wrong filter]
+Q: What are the names of the countries with no car makers?
+GOLD: SELECT CountryName FROM countries EXCEPT SELECT T1.CountryName FROM countries AS T1 JOIN CAR_MAKERS AS T2 ON T1.countryId  =  T2.Country;
+PRED: SELECT CountryName FROM countries EXCEPT SELECT T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Country = "USA"
+
+[O_oracle_plan | spider_dev | wrong tables]
+Q: What are the ids and names of all countries that either have more than 3 car makers or produce fiat model ?
+GOLD: select t1.countryid ,  t1.countryname from countries as t1 join car_makers as t2 on t1.countryid  =  t2.country group by t1.countryid having count(*)  >  3 union select t1.countryid ,  t1.countryname from countries as t1 join car_makers as t2 on t1.countryid  =  t2.country join model_list as t3 on t2.id  =  t3.maker where t3.model  =  'fiat';
+PRED: SELECT T1.CountryId , T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Country = 'USA' GROUP BY T1.CountryId HAVING COUNT(*) > 3 UNION SELECT T1.CountryId , T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Maker = 1 GROUP BY T1.CountryId HAVING COUNT(*) > 3 UNION SELECT T1.CountryId , T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Maker = 2 GROUP BY T1.CountryId HAVING COUNT(*) > 3 UNION SELECT T1.CountryId , T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Maker = 3 GROUP BY T1.CountryId HAVING COUNT(*) > 3 UNION SELECT T1.CountryId , T1.CountryName FROM countries AS T1 JOIN car_makers AS T2 ON T1.CountryId = T2.Country WHERE T2.Maker = 4 GROUP BY T1.CountryId HAVING COUNT(*) > 3 UNION SELECT T1.CountryId , T1.CountryName FROM countries AS T1 JOIN car_makers
+
+[O_oracle_plan | spider_dev | exec:no-such-column]
+Q: Find the number of visitors who did not visit any museum opened after 2010.
+GOLD: SELECT count(*) FROM visitor WHERE id NOT IN (SELECT t2.visitor_id FROM museum AS t1 JOIN visit AS t2 ON t1.Museum_ID  =  t2.Museum_ID WHERE t1.open_year  >  2010)
+PRED: SELECT count(*) FROM visitor WHERE ID NOT IN (SELECT T3.visitor_id FROM museum AS T1 JOIN visit AS T2 ON T1.museum_id = T2.museum_id WHERE T1.open_year > 2010)
+
+[O_oracle_plan | spider_dev | wrong aggregate]
+Q: What are the different addresses that have students living there?
+GOLD: SELECT count(DISTINCT current_address_id) FROM Students
+PRED: SELECT DISTINCT current_address_id FROM Students
+
+[O_oracle_plan | spider_dev | wrong nesting/set op]
+Q: How many countries speak both English and Dutch?
+GOLD: SELECT COUNT(*) FROM (SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  "English" INTERSECT SELECT T1.Name FROM country AS T1 JOIN countrylanguage AS T2 ON T1.Code  =  T2.CountryCode WHERE T2.Language  =  "Dutch")
+PRED: SELECT COUNT(T1.Code) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'English' INTERSECT SELECT COUNT(T1.Code) FROM country AS T1 INNER JOIN countrylanguage AS T2 ON T1.Code = T2.CountryCode WHERE T2.Language = 'Dutch'
+
+[O_oracle_plan | spider_dev | wrong ordering/limit]
+Q: What is the language spoken by the largest percentage of people in each country?
+GOLD: SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode
+PRED: SELECT Language FROM countrylanguage GROUP BY CountryCode ORDER BY MAX(Percentage) DESC
+
+[O_oracle_plan | spider_dev | wrong ordering/limit]
+Q: What are the country codes of the different countries, and what are the languages spoken by the greatest percentage of people for each?
+GOLD: SELECT LANGUAGE ,  CountryCode ,  max(Percentage) FROM countrylanguage GROUP BY CountryCode
+PRED: SELECT CountryCode , Language FROM countrylanguage GROUP BY CountryCode, Language ORDER BY MAX(Percentage) DESC
+
+[O_oracle_plan | spider_dev | wrong ordering/limit]
+Q: What is the total number of countries where Spanish is spoken by the largest percentage of people?
+GOLD: SELECT count(*) ,   max(Percentage) FROM countrylanguage WHERE LANGUAGE  =  "Spanish" GROUP BY CountryCode
+PRED: SELECT COUNT(*) FROM countrylanguage WHERE Language = 'Spanish' GROUP BY Language ORDER BY Percentage DESC LIMIT 1
+
+[O_oracle_plan | spider_dev | wrong grouping]
+Q: Count the number of countries for which Spanish is the predominantly spoken language.
+GOLD: SELECT count(*) ,   max(Percentage) FROM countrylanguage WHERE LANGUAGE  =  "Spanish" GROUP BY CountryCode
+PRED: SELECT COUNT(*) FROM countrylanguage WHERE Language = 'Spanish' GROUP BY CountryCode HAVING MAX(Percentage) = 100
+
+[O_oracle_plan | spider_dev | wrong grouping]
+Q: Return the codes of countries for which Spanish is the predominantly spoken language.
+GOLD: SELECT CountryCode ,  max(Percentage) FROM countrylanguage WHERE LANGUAGE  =  "Spanish" GROUP BY CountryCode
+PRED: SELECT CountryCode FROM countrylanguage WHERE Language = 'Spanish' GROUP BY CountryCode HAVING MAX(Percentage) = 100
+
+[O_oracle_plan | spider_dev | wrong tables]
+Q: List the names of the dogs of the rarest breed and the treatment dates of them.
+GOLD: SELECT T1.name ,  T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id  =  T2.dog_id WHERE T1.breed_code  =  ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY count(*) ASC LIMIT 1 )
+PRED: SELECT T1.name , T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id WHERE T1.breed_code = (SELECT breed_code FROM Breeds GROUP BY breed_code ORDER BY count(*) ASC LIMIT 1) GROUP BY T1.dog_id ORDER BY count(*) DESC LIMIT 1
+
+[O_oracle_plan | spider_dev | wrong tables]
+Q: Which dogs are of the rarest breed? Show their names and treatment dates.
+GOLD: SELECT T1.name ,  T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id  =  T2.dog_id WHERE T1.breed_code  =  ( SELECT breed_code FROM Dogs GROUP BY breed_code ORDER BY count(*) ASC LIMIT 1 )
+PRED: SELECT T1.name , T2.date_of_treatment FROM Dogs AS T1 JOIN Treatments AS T2 ON T1.dog_id = T2.dog_id WHERE T1.breed_code = (SELECT breed_code FROM Breeds GROUP BY breed_code ORDER BY count(*) ASC LIMIT 1) GROUP BY T1.dog_id ORDER BY count(*) DESC LIMIT 1
+
+[A_direct | bird_dev | wrong tables]
+Q: What is the highest eligible free rate for K-12 students in the schools in Alameda County?
+GOLD: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda' ORDER BY (CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`) DESC LIMIT 1
+PRED: SELECT MAX(T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Alameda County'
+
+[A_direct | bird_dev | wrong filter]
+Q: Please list the lowest three eligible free rates for students aged 5-17 in continuation schools.
+GOLD: SELECT `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` FROM frpm WHERE `Educational Option Type` = 'Continuation School' AND `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` IS NOT NULL ORDER BY `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` ASC LIMIT 3
+PRED: SELECT CAST(`Free Meal Count (Ages 5-17)` AS REAL) / `Enrollment (Ages 5-17)` FROM frpm ORDER BY CAST(`Free Meal Count (Ages 5-17)` AS REAL) / `Enrollment (Ages 5-17)` LIMIT 3
+
+[A_direct | bird_dev | wrong details]
+Q: Please list the zip code of all the charter schools in Fresno County Office of Education.
+GOLD: SELECT T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`District Name` = 'Fresno County Office of Education' AND T1.`Charter School (Y/N)` = 1
+PRED: SELECT T1.Zip FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.County = 'Fresno County Office of Education' AND T2.`Charter School (Y/N)` = 1
+
+[A_direct | bird_dev | wrong details]
+Q: Please list the phone numbers of the direct charter-funded schools that are opened after 2000/1/1.
+GOLD: SELECT T2.Phone FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`Charter School (Y/N)` = 1 AND T2.OpenDate > '2000-01-01'
+PRED: SELECT T1.Phone FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter School (Y/N)` = 1 AND T1.OpenDate > '2000-01-01'
+
+[A_direct | bird_dev | exec:no-such-column]
+Q: How many schools with an average score in Math greater than 400 in the SAT test are exclusively virtual?
+GOLD: SELECT COUNT(DISTINCT T2.School) FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Virtual = 'F' AND T1.AvgScrMath > 400
+PRED: SELECT COUNT(T1.cds) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrMath > 400 AND T1.Virtual = 'F'
+
+[A_direct | bird_dev | exec:no-such-column]
+Q: What is the number of SAT test takers of the schools with the highest FRPM count for K-12 students?
+GOLD: SELECT NumTstTakr FROM satscores WHERE cds = ( SELECT CDSCode FROM frpm ORDER BY `FRPM Count (K-12)` DESC LIMIT 1 )
+PRED: SELECT COUNT(T1.cds) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.CDSCode IN ( SELECT T2.cds FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.rtype = 'K-12' ORDER BY T2.FRPMCount DESC LIMIT 1 )
+
+[A_direct | bird_dev | wrong tables]
+Q: Among the schools with the average score in Math over 560 in the SAT test, how many schools are directly charter-funded?
+GOLD: SELECT COUNT(T2.`School Code`) FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrMath > 560 AND T2.`Charter Funding Type` = 'Directly funded'
+PRED: SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrMath > 560 AND T1.FundingType = 'Charter'
+
+[A_direct | bird_dev | exec:no-such-column]
+Q: For the school with the highest average score in Reading in the SAT test, what is its FRPM count for students aged 5-17?
+GOLD: SELECT T2.`FRPM Count (Ages 5-17)` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead DESC LIMIT 1
+PRED: SELECT T2.FRPMCount FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T2.AvgScrRead DESC LIMIT 1
+
+[A_direct | bird_dev | wrong details]
+Q: Please list the phone numbers of the schools with the top 3 SAT excellence rate.
+GOLD: SELECT T1.Phone FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY CAST(T2.NumGE1500 AS REAL) / T2.NumTstTakr DESC LIMIT 3
+PRED: SELECT T1.Phone FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY T2.NumGE1500 / T2.NumTstTakr DESC LIMIT 3
+
+[A_direct | bird_dev | wrong grouping]
+Q: Which active district has the highest average score in Reading?
+GOLD: SELECT T1.District FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' ORDER BY T2.AvgScrRead DESC LIMIT 1
+PRED: SELECT T1.District FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.StatusType = 'Active' GROUP BY T1.District ORDER BY AVG(T2.AvgScrRead) DESC LIMIT 1
+
+[A_direct | bird_dev | wrong aggregate]
+Q: Rank schools by their average score in Writing where the score is greater than 499, showing their charter numbers.
+GOLD: SELECT CharterNum, AvgScrWrite, RANK() OVER (ORDER BY AvgScrWrite DESC) AS WritingScoreRank FROM schools AS T1  INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 AND CharterNum is not null
+PRED: SELECT T1.CDSCode, T1.CharterNum FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 ORDER BY T2.AvgScrWrite DESC
+
+[A_direct | bird_dev | wrong tables]
+Q: How many schools in Fresno (directly funded) have number of test takers not more than 250?
+GOLD: SELECT COUNT(T1.CDSCode) FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`County Name` = 'Fresno' AND T2.NumTstTakr <= 250
+PRED: SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.County = 'Fresno' AND T1.FundingType = 'Direct' AND T2.NumTstTakr <= 250
+
+[A_direct | bird_dev | wrong filter]
+Q: When did the first-through-twelfth-grade school with the largest enrollment open?
+GOLD: SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T1.`Enrollment (K-12)` DESC LIMIT 1
+PRED: SELECT T1.OpenDate FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Low Grade` = 'K-12' ORDER BY T2.`Enrollment (K-12)` DESC LIMIT 1
+
+[A_direct | bird_dev | wrong grouping]
+Q: Which cities have the top 5 lowest enrollment number for students in grades 1 through 12?
+GOLD: SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY SUM(T1.`Enrollment (K-12)`) ASC LIMIT 5
+PRED: SELECT T1.City FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Low Grade` = 'K-12' ORDER BY T2.`Enrollment (K-12)` LIMIT 5
+
+[A_direct | bird_dev | exec:syntax]
+Q: What is the free rate for students between the ages of 5 and 17 at the school run by Kacey Gibson?
+GOLD: SELECT CAST(T2.`Free Meal Count (Ages 5-17)` AS REAL) / T2.`Enrollment (Ages 5-17)` FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.AdmFName1 = 'Kacey' AND T1.AdmLName1 = 'Gibson'
+PRED: SELECT CAST(T2.Free Meal Count (Ages 5-17) AS REAL) / T2.Enrollment (Ages 5-17) FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.School = 'Kacey Gibson'
+
+[A_direct | bird_dev | wrong filter]
+Q: Under whose administration is the school with the highest number of students scoring 1500 or more on the SAT? Indicate their full names.
+GOLD: SELECT T2.AdmFName1, T2.AdmLName1, T2.AdmFName2, T2.AdmLName2, T2.AdmFName3, T2.AdmLName3 FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1
+PRED: SELECT T1.AdmFName1, T1.AdmLName1, T1.AdmFName2, T1.AdmLName2, T1.AdmFName3, T1.AdmLName3 FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumGE1500 = 1500 ORDER BY T2.NumGE1500 DESC LIMIT 1
+
+[A_direct | bird_dev | exec:other]
+Q: List the names of virtual schools that are among the top 5 in their respective counties based on average reading scores.
+GOLD: SELECT School FROM (SELECT T2.School,T1.AvgScrRead, RANK() OVER (PARTITION BY T2.County ORDER BY T1.AvgScrRead DESC) AS rnk FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Virtual = 'F' ) ranked_schools WHERE rnk <= 5
+PRED: SELECT T1.School FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.Virtual = 'F' ORDER BY AVG(T2.AvgScrRead) DESC LIMIT 5
+
+[A_direct | bird_dev | wrong grouping]
+Q: What is the average writing score of the school who has the highest number of test takers whose total SAT sscores are greater or equal to 1500? Indicate the city to where the school is situated.
+GOLD: SELECT T1.AvgScrWrite, T2.City FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1
+PRED: SELECT T1.City, AVG(T2.AvgScrWrite) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr >= 1500 GROUP BY T1.City ORDER BY COUNT(T2.NumTstTakr) DESC LIMIT 1
+
+[A_direct | bird_dev | wrong nesting/set op]
+Q: Which different county has the most number of closed schools? Please provide the name of each school as well as the closure date.
+GOLD: SELECT DISTINCT County, School, ClosedDate FROM schools WHERE County = ( SELECT County FROM schools WHERE StatusType = 'Closed' GROUP BY County ORDER BY COUNT(School) DESC LIMIT 1 ) AND StatusType = 'Closed' AND school IS NOT NULL
+PRED: SELECT T1.County, T1.ClosedDate FROM schools AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.StatusType = 'Closed' GROUP BY T1.County ORDER BY COUNT(T1.CDSCode) DESC LIMIT 1
+
+[A_direct | bird_dev | exec:syntax]
+Q: What is the total number of schools with a mailing city in Hickman belonging to the charter number 00D4?
+GOLD: SELECT COUNT(*) FROM schools WHERE CharterNum = '00D4' AND MailCity = 'Hickman'
+PRED: SELECT COUNT(CDSCode) FROM schools WHERE MailingCity = 'Hickman' AND Charter = 00D4
+
+[A_direct | bird_dev | exec:syntax]
+Q: What is the free or reduced price meal count for ages 5 to 17 in the Youth Authority School with a mailing street address of PO Box 1040?
+GOLD: SELECT T1.`FRPM Count (Ages 5-17)` FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.MailStreet = 'PO Box 1040' AND T2.SOCType = 'Youth Authority Facilities'
+PRED: SELECT T1.Free Meal Count (Ages 5-17) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.MailStreet = 'PO Box 1040' AND T2.School = 'Youth Authority School'
+
+[A_direct | bird_dev | wrong nesting/set op]
+Q: What are the two most common first names among the school administrators? Indicate the district to which they administer.
+GOLD: SELECT DISTINCT T1.AdmFName1, T1.District FROM schools AS T1 INNER JOIN ( SELECT admfname1 FROM schools GROUP BY admfname1 ORDER BY COUNT(admfname1) DESC LIMIT 2 ) AS T2 ON T1.AdmFName1 = T2.admfname1
+PRED: SELECT AdmFName1, AdmLName1, District FROM schools GROUP BY AdmFName1, AdmLName1 ORDER BY COUNT(DISTRICT) DESC LIMIT 2
+
+[A_direct | bird_dev | exec:other]
+Q: List the top nine districts, by descending order, from the highest to the lowest, the number of female account holders.
+GOLD: SELECT T2.A2, COUNT(T1.client_id) FROM client AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T1.gender = 'F' GROUP BY T2.district_id, T2.A2 ORDER BY COUNT(T1.client_id) DESC LIMIT 9
+PRED: SELECT T1.A2 FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T2.gender = 'F' ORDER BY COUNT(T2.district_id) DESC LIMIT 9
+
+[A_direct | bird_dev | wrong nesting/set op]
+Q: In 1996, which districts have the highest unemployment rate? List their branch location and district name.
+GOLD: SELECT district_id, A2 FROM district ORDER BY A13 DESC LIMIT 1
+PRED: SELECT A2, A13 FROM district WHERE A13 = ( SELECT MAX(A13) FROM district )
+
+[A_direct | bird_dev | wrong ordering/limit]
+Q: In the branch where the second-highest number of crimes were committed in 1995 occurred, how many male clients are there?
+GOLD: SELECT COUNT(T1.client_id) FROM client AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T1.gender = 'M' AND T2.A15 = (SELECT T3.A15 FROM district AS T3 ORDER BY T3.A15 DESC LIMIT 1, 1)
+PRED: SELECT COUNT(T1.client_id) FROM client AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T1.gender = 'M' AND T2.A15 = ( SELECT MAX(A15) FROM district )
+
+[A_direct | bird_dev | wrong aggregate]
+Q: What percentage of carcinogenic-type molecules does not contain fluorine?
+GOLD: SELECT CAST(COUNT(DISTINCT CASE WHEN T1.element <> 'f' THEN T2.molecule_id ELSE NULL END) AS REAL) * 100 / COUNT(DISTINCT T2.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+'
+PRED: SELECT CAST(SUM(IIF(T1.element != 'f', 1, 0)) AS REAL) * 100 / COUNT(T1.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+'
+
+[A_direct | bird_dev | wrong aggregate]
+Q: Tally the toxicology element of the 4th atom of each molecule that was carcinogenic.
+GOLD: SELECT DISTINCT T1.element FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+' AND SUBSTR(T1.atom_id, -1) = '4' AND LENGTH(T1.atom_id) = 7
+PRED: SELECT SUM(CASE WHEN T2.label = '+' THEN 1 ELSE 0 END) AS count FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.atom_id LIKE '%4'
+
+[A_direct | bird_dev | wrong ordering/limit]
+Q: Which card costs more converted mana, "Serra Angel" or "Shrine Keeper"?
+GOLD: SELECT name FROM cards WHERE name IN ('Serra Angel', 'Shrine Keeper') ORDER BY convertedManaCost DESC LIMIT 1
+PRED: SELECT CASE WHEN T1.convertedManaCost > T2.convertedManaCost THEN T1.name ELSE T2.name END FROM cards AS T1 INNER JOIN cards AS T2 ON T1.id = T2.id WHERE T1.name = 'Serra Angel' OR T2.name = 'Shrine Keeper'
+
+[A_direct | bird_dev | wrong ordering/limit]
+Q: What is the annual average number of sets that were released between 1/1/2012 to 12/31/2015? Indicate the common langugage of the card.
+GOLD: SELECT (CAST(SUM(T1.id) AS REAL) / COUNT(T1.id)) / 4, T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.id = T2.id WHERE T1.releaseDate BETWEEN '2012-01-01' AND '2015-12-31' GROUP BY T1.releaseDate ORDER BY COUNT(T2.language) DESC LIMIT 1
+PRED: SELECT AVG(T1.id), T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.releaseDate BETWEEN '2012-01-01' AND '2015-12-31' GROUP BY T2.language
+
+[A_direct | bird_dev | exec:other]
+Q: When did 'chl' cast its first vote in a post?
+GOLD: SELECT T2.CreationDate FROM users AS T1 INNER JOIN votes AS T2 ON T1.Id = T2.UserId WHERE T1.DisplayName = 'chl' ORDER BY T2.CreationDate LIMIT 1
+PRED: SELECT MIN(CreationDate) FROM votes AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T2.DisplayName = 'chl'
+
+[A_direct | bird_dev | exec:no-such-table]
+Q: Rank superheroes from Marvel Comics by their eye color popularity, starting with the most common color.
+GOLD: SELECT colour.colour AS EyeColor, COUNT(superhero.id) AS Count, RANK() OVER (ORDER BY COUNT(superhero.id) DESC) AS PopularityRank FROM superhero INNER JOIN colour ON superhero.eye_colour_id = colour.id INNER JOIN publisher ON superhero.publisher_id = publisher.id WHERE publisher.publisher_name = 'Marvel Comics' GROUP BY colour.colour
+PRED: SELECT T1.eye_colour_id, COUNT(T1.id) FROM hero AS T1 INNER JOIN superhero AS T2 ON T1.id = T2.id INNER JOIN publisher AS T3 ON T2.publisher_id = T3.id WHERE T3.publisher_name = 'Marvel Comics' GROUP BY T1.eye_colour_id ORDER BY COUNT(T1.id) DESC
+
+[A_direct | bird_dev | exec:no-such-table]
+Q: How many superheroes with blonde hair are there?
+GOLD: SELECT COUNT(T1.id) FROM superhero AS T1 INNER JOIN colour AS T2 ON T1.hair_colour_id = T2.id WHERE T2.colour = 'Blond'
+PRED: SELECT COUNT(T1.id) FROM hero AS T1 INNER JOIN hero_attribute AS T2 ON T1.id = T2.hero_id INNER JOIN colour AS T3 ON T2.hair_colour_id = T3.id WHERE T3.colour = 'Blond'
+
+[A_direct | bird_dev | exec:no-such-table]
+Q: Please list the lap records for the circuits in Italy.
+GOLD: WITH fastest_lap_times AS (SELECT T1.raceId, T1.FastestLapTime, (CAST(SUBSTR(T1.FastestLapTime, 1, INSTR(T1.FastestLapTime, ':') - 1) AS REAL) * 60) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, ':') + 1, INSTR(T1.FastestLapTime, '.') - INSTR(T1.FastestLapTime, ':') - 1) AS REAL)) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, '.') + 1) AS REAL) / 1000) as time_in_seconds FROM results AS T1 WHERE T1.FastestLapTime IS NOT NULL ) SELECT T1.FastestLapTime as lap_record FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId INNER JOIN circuits AS T3 on T2.circuitId = T3.circuitId INNER JOIN (SELECT MIN(fastest_lap_times.time_in_seconds) as min_time_in_seconds FROM fastest_lap_times INNER JOIN races AS T2 on fastest_lap_times.raceId = T2.raceId INNER JOIN circuits AS T3 on T2.circuitId = T3.circuitId WHERE T3.country = 'Italy' ) AS T4 ON (CAST(SUBSTR(T1.FastestLapTime, 1, INSTR(T1.FastestLapTime, ':') - 1) AS REAL) * 60) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, ':') + 1, INSTR(T1.FastestLapTime, '.') - INSTR(T1.FastestLapTime, ':') - 1) AS REAL)) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, '.') + 1) AS REAL) / 1000) = T4.min_time_in_seconds LIMIT 1
+PRED: SELECT T1.time FROM laps AS T1 INNER JOIN circuits AS T2 ON T1.raceId = T2.circuitId WHERE T2.country = 'Italy'
+
+[B_plan | bird_dev | wrong tables]
+Q: What is the highest eligible free rate for K-12 students in the schools in Alameda County?
+GOLD: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda' ORDER BY (CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`) DESC LIMIT 1
+PRED: SELECT T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Alameda County' ORDER BY T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` DESC LIMIT 1
+
+[B_plan | bird_dev | wrong details]
+Q: Please list the lowest three eligible free rates for students aged 5-17 in continuation schools.
+GOLD: SELECT `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` FROM frpm WHERE `Educational Option Type` = 'Continuation School' AND `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` IS NOT NULL ORDER BY `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` ASC LIMIT 3
+PRED: SELECT `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` FROM frpm WHERE `School Type` = 'Continuation' ORDER BY `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` ASC LIMIT 3
+
+[B_plan | bird_dev | wrong details]
+Q: Please list the zip code of all the charter schools in Fresno County Office of Education.
+GOLD: SELECT T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`District Name` = 'Fresno County Office of Education' AND T1.`Charter School (Y/N)` = 1
+PRED: SELECT T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Charter School (Y/N)` = 1 AND T2.County = 'Fresno County Office of Education'
+
+[B_plan | bird_dev | wrong filter]
+Q: What is the unabbreviated mailing street address of the school with the highest FRPM count for K-12 students?
+GOLD: SELECT T2.MailStreet FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T1.`FRPM Count (K-12)` DESC LIMIT 1
+PRED: SELECT T1.MailStreet FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Low Grade` = 'K-12' ORDER BY T2.`FRPM Count (K-12)` DESC LIMIT 1
+
+[B_plan | bird_dev | wrong details]
+Q: Please list the phone numbers of the direct charter-funded schools that are opened after 2000/1/1.
+GOLD: SELECT T2.Phone FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`Charter School (Y/N)` = 1 AND T2.OpenDate > '2000-01-01'
+PRED: SELECT T1.Phone FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter School (Y/N)` = 1 AND T1.OpenDate > '2000-01-01'
+
+[B_plan | bird_dev | exec:syntax]
+Q: What is the number of SAT test takers of the schools with the highest FRPM count for K-12 students?
+GOLD: SELECT NumTstTakr FROM satscores WHERE cds = ( SELECT CDSCode FROM frpm ORDER BY `FRPM Count (K-12)` DESC LIMIT 1 )
+PRED: SELECT COUNT(T2.cname) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.FRPM Count (K-12) = ( SELECT T1.FRPM Count (K-12) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY T1.FRPM Count (K-12) DESC LIMIT 1 )
+
+[B_plan | bird_dev | wrong tables]
+Q: Among the schools with the average score in Math over 560 in the SAT test, how many schools are directly charter-funded?
+GOLD: SELECT COUNT(T2.`School Code`) FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrMath > 560 AND T2.`Charter Funding Type` = 'Directly funded'
+PRED: SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrMath > 560 AND T1.FundingType = 'Charter'
+
+[B_plan | bird_dev | exec:no-such-column]
+Q: For the school with the highest average score in Reading in the SAT test, what is its FRPM count for students aged 5-17?
+GOLD: SELECT T2.`FRPM Count (Ages 5-17)` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead DESC LIMIT 1
+PRED: SELECT T1.FRPMCount FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY T2.AvgScrRead DESC LIMIT 1
+
+[B_plan | bird_dev | exec:no-such-column]
+Q: Among the schools with an SAT excellence rate of over 0.3, what is the highest eligible free rate for students aged 5-17?
+GOLD: SELECT MAX(CAST(T1.`Free Meal Count (Ages 5-17)` AS REAL) / T1.`Enrollment (Ages 5-17)`) FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE CAST(T2.NumGE1500 AS REAL) / T2.NumTstTakr > 0.3
+PRED: SELECT MAX(T2.`Free Meal Count (Ages 5-17)`) / MAX(T2.`Enrollment (Ages 5-17)`) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumGE1500 / T2.NumTstTakr > 0.3
+
+[B_plan | bird_dev | exec:no-such-column]
+Q: List the top five schools, by descending order, from the highest to the lowest, the most number of Enrollment (Ages 5-17). Please give their NCES school identification number.
+GOLD: SELECT T1.NCESSchool FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T2.`Enrollment (Ages 5-17)` DESC LIMIT 5
+PRED: SELECT T1.NCESchool FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T2.`Enrollment (Ages 5-17)` DESC LIMIT 5
+
+[B_plan | bird_dev | wrong aggregate]
+Q: Rank schools by their average score in Writing where the score is greater than 499, showing their charter numbers.
+GOLD: SELECT CharterNum, AvgScrWrite, RANK() OVER (ORDER BY AvgScrWrite DESC) AS WritingScoreRank FROM schools AS T1  INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 AND CharterNum is not null
+PRED: SELECT T1.CDSCode, T1.CharterNum FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 ORDER BY T2.AvgScrWrite
+
+[B_plan | bird_dev | wrong tables]
+Q: How many schools in Fresno (directly funded) have number of test takers not more than 250?
+GOLD: SELECT COUNT(T1.CDSCode) FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`County Name` = 'Fresno' AND T2.NumTstTakr <= 250
+PRED: SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.County = 'Fresno' AND T2.NumTstTakr <= 250 AND T1.FundingType = 'Direct'
+
+[B_plan | bird_dev | exec:syntax]
+Q: Give the names of the schools with the percent eligible for free meals in K-12 is more than 0.1 and test takers whose test score is greater than or equal to 1500?
+GOLD: SELECT T2.`School Name` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE CAST(T2.`Free Meal Count (K-12)` AS REAL) / T2.`Enrollment (K-12)` > 0.1 AND T1.NumGE1500 > 0
+PRED: SELECT T1.School FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr >= 1500 AND T1.Free Meal Count (K-12) / T1.Enrollment (K-12) > 0.1
+
+[B_plan | bird_dev | wrong filter]
+Q: When did the first-through-twelfth-grade school with the largest enrollment open?
+GOLD: SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T1.`Enrollment (K-12)` DESC LIMIT 1
+PRED: SELECT T1.OpenDate FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Low Grade` = 'K-12' ORDER BY T2.`Enrollment (K-12)` DESC LIMIT 1
+
+[B_plan | bird_dev | wrong grouping]
+Q: Which cities have the top 5 lowest enrollment number for students in grades 1 through 12?
+GOLD: SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY SUM(T1.`Enrollment (K-12)`) ASC LIMIT 5
+PRED: SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Low Grade` = 'K-12' ORDER BY T1.`Enrollment (K-12)` LIMIT 5
+
+[B_plan | bird_dev | wrong nesting/set op]
+Q: What is the eligible free rate of the 10th and 11th schools with the highest enrolment for students in grades 1 through 12?
+GOLD: SELECT CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)` FROM frpm ORDER BY `Enrollment (K-12)` DESC LIMIT 9, 2
+PRED: SELECT `Free Meal Count (K-12)`, `Enrollment (K-12)` FROM frpm WHERE `Low Grade` = 10 AND `High Grade` = 11 AND `Enrollment (K-12)` > 0 AND `Free Meal Count (K-12)` > 0 AND `Free Meal Count (K-12)` / `Enrollment (K-12)` = ( SELECT MAX(`Free Meal Count (K-12)` / `Enrollment (K-12)`) FROM frpm WHERE `Low Grade` = 10 AND `High Grade` = 11 AND `Enrollment (K-12)` > 0 AND `Free Meal Count (K-12)` > 0 )
+
+[B_plan | bird_dev | wrong grouping]
+Q: Under whose administration is the school with the highest number of students scoring 1500 or more on the SAT? Indicate their full names.
+GOLD: SELECT T2.AdmFName1, T2.AdmLName1, T2.AdmFName2, T2.AdmLName2, T2.AdmFName3, T2.AdmLName3 FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1
+PRED: SELECT T1.AdmFName1, T1.AdmLName1 FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumGE1500 >= 1500 GROUP BY T1.CDSCode ORDER BY COUNT(T1.CDSCode) DESC LIMIT 1
+
+[B_plan | bird_dev | wrong aggregate]
+Q: What is the average number of test takers from Fresno schools that opened between 1/1/1980 and 12/31/1980?
+GOLD: SELECT AVG(T1.NumTstTakr) FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE strftime('%Y', T2.OpenDate) = '1980' AND T2.County = 'Fresno'
+PRED: SELECT SUM(T2.NumTstTakr) / COUNT(T2.cds) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.OpenDate BETWEEN '1980-01-01' AND '1980-12-31' AND T1.City = 'Fresno'
+
+[B_plan | bird_dev | wrong nesting/set op]
+Q: List the names of virtual schools that are among the top 5 in their respective counties based on average reading scores.
+GOLD: SELECT School FROM (SELECT T2.School,T1.AvgScrRead, RANK() OVER (PARTITION BY T2.County ORDER BY T1.AvgScrRead DESC) AS rnk FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Virtual = 'F' ) ranked_schools WHERE rnk <= 5
+PRED: SELECT T1.School FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.Virtual = 'F' GROUP BY T1.CDSCode ORDER BY AVG(T2.AvgScrRead) DESC LIMIT 5
+
+[B_plan | bird_dev | wrong filter]
+Q: What is the average math score of the school with the lowest average score for all subjects, and in which county is it located?
+GOLD: SELECT T1.AvgScrMath, T2.County FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrMath IS NOT NULL ORDER BY T1.AvgScrMath + T1.AvgScrRead + T1.AvgScrWrite ASC LIMIT 1
+PRED: SELECT T1.County, T2.AvgScrMath + T2.AvgScrRead + T2.AvgScrWrite FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY T2.AvgScrMath + T2.AvgScrRead + T2.AvgScrWrite LIMIT 1
+
+[B_plan | bird_dev | wrong aggregate]
+Q: What is the average writing score of the school who has the highest number of test takers whose total SAT sscores are greater or equal to 1500? Indicate the city to where the school is situated.
+GOLD: SELECT T1.AvgScrWrite, T2.City FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1
+PRED: SELECT AVG(T2.AvgScrWrite), T1.City FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr >= 1500 ORDER BY T2.NumTstTakr DESC LIMIT 1
+
+[B_plan | bird_dev | wrong nesting/set op]
+Q: Which different county has the most number of closed schools? Please provide the name of each school as well as the closure date.
+GOLD: SELECT DISTINCT County, School, ClosedDate FROM schools WHERE County = ( SELECT County FROM schools WHERE StatusType = 'Closed' GROUP BY County ORDER BY COUNT(School) DESC LIMIT 1 ) AND StatusType = 'Closed' AND school IS NOT NULL
+PRED: SELECT County, ClosedDate FROM schools WHERE StatusType = 'Closed' GROUP BY County ORDER BY COUNT(ClosedDate) DESC LIMIT 1
+
+[B_plan | bird_dev | exec:syntax]
+Q: What is the total number of schools with a mailing city in Hickman belonging to the charter number 00D4?
+GOLD: SELECT COUNT(*) FROM schools WHERE CharterNum = '00D4' AND MailCity = 'Hickman'
+PRED: SELECT COUNT(CDSCode) FROM schools WHERE MailingCity = 'Hickman' AND Charter = 00D4
+
+[B_plan | bird_dev | exec:other]
+Q: Which county reported the most number of school closure in the 1980s with school wonership code belonging to Youth Authority Facilities (CEA)?
+GOLD: SELECT County FROM schools WHERE strftime('%Y', ClosedDate) BETWEEN '1980' AND '1989' AND StatusType = 'Closed' AND SOC = 11 GROUP BY County ORDER BY COUNT(School) DESC LIMIT 1
+PRED: SELECT County FROM schools WHERE SOC = 11 AND YEAR(ClosedDate) BETWEEN 1980 AND 1989 GROUP BY County ORDER BY COUNT(ClosedDate) DESC LIMIT 1
+
+[B_plan | bird_dev | wrong grouping]
+Q: What is the gender of the oldest client who opened his/her account in the highest average salary branch?
+GOLD: SELECT T2.gender FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id ORDER BY T1.A11 DESC, T2.birth_date ASC LIMIT 1
+PRED: SELECT T1.gender FROM client AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id GROUP BY T1.gender ORDER BY AVG(T2.A11) DESC LIMIT 1
+
+[B_plan | bird_dev | wrong ordering/limit]
+Q: In 1996, which districts have the highest unemployment rate? List their branch location and district name.
+GOLD: SELECT district_id, A2 FROM district ORDER BY A13 DESC LIMIT 1
+PRED: SELECT A2, A13 FROM district WHERE A13 IS NOT NULL AND A13 > 0
+
+[B_plan | bird_dev | wrong ordering/limit]
+Q: Which card costs more converted mana, "Serra Angel" or "Shrine Keeper"?
+GOLD: SELECT name FROM cards WHERE name IN ('Serra Angel', 'Shrine Keeper') ORDER BY convertedManaCost DESC LIMIT 1
+PRED: SELECT CASE WHEN convertedManaCost > 1 THEN 'Serra Angel' ELSE 'Shrine Keeper' END FROM cards WHERE name IN ('Serra Angel', 'Shrine Keeper')
+
+[B_plan | bird_dev | wrong ordering/limit]
+Q: What is the annual average number of sets that were released between 1/1/2012 to 12/31/2015? Indicate the common langugage of the card.
+GOLD: SELECT (CAST(SUM(T1.id) AS REAL) / COUNT(T1.id)) / 4, T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.id = T2.id WHERE T1.releaseDate BETWEEN '2012-01-01' AND '2015-12-31' GROUP BY T1.releaseDate ORDER BY COUNT(T2.language) DESC LIMIT 1
+PRED: SELECT COUNT(T1.id) / COUNT(T2.language), T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.code = T2.setCode WHERE T1.releaseDate BETWEEN '2012-01-01' AND '2015-12-31' GROUP BY T2.language
+
+[B_plan | bird_dev | exec:other]
+Q: How old is the youngest Japanese driver? What is his name?
+GOLD: SELECT STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', dob), forename , surname FROM drivers WHERE nationality = 'Japanese' ORDER BY dob DESC LIMIT 1
+PRED: SELECT MIN(YEAR(CURRENT_TIMESTAMP) - YEAR(dob)) AS age, name FROM drivers WHERE nationality = 'Japanese' AND dob IS NOT NULL
+
+[B_plan | bird_dev | exec:other]
+Q: How many wins was achieved by the oldest racer? Indicate his/her full name.
+GOLD: SELECT SUM(T1.wins),T2.forename, T2.surname FROM driverStandings AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId ORDER BY T2.dob ASC LIMIT 1
+PRED: SELECT MIN(T1.dob), T1.forename, T1.surname FROM drivers AS T1 INNER JOIN driverStandings AS T2 ON T1.driverId = T2.driverId WHERE T2.wins = ( SELECT MIN(T2.wins) FROM driverStandings )
+
+[V_B_plan | bird_dev | wrong tables]
+Q: What is the highest eligible free rate for K-12 students in the schools in Alameda County?
+GOLD: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda' ORDER BY (CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`) DESC LIMIT 1
+PRED: SELECT T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Alameda County' ORDER BY T1.`Free Meal Count (K-12)` / T1.`Enrollment (K-12)` DESC LIMIT 1
+
+[V_B_plan | bird_dev | exec:no-such-column]
+Q: Please list the lowest three eligible free rates for students aged 5-17 in continuation schools.
+GOLD: SELECT `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` FROM frpm WHERE `Educational Option Type` = 'Continuation School' AND `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` IS NOT NULL ORDER BY `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` ASC LIMIT 3
+PRED: SELECT T1.`Free Meal Count (Ages 5-17)` / T1.`Enrollment (Ages 5-17)` FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.`School Code` = T2.CDSCode WHERE T2.`School Type` = 'Continuation' ORDER BY T1.`Free Meal Count (Ages 5-17)` / T1.`Enrollment (Ages 5-17)` ASC LIMIT 3
+
+[V_B_plan | bird_dev | wrong details]
+Q: Please list the zip code of all the charter schools in Fresno County Office of Education.
+GOLD: SELECT T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`District Name` = 'Fresno County Office of Education' AND T1.`Charter School (Y/N)` = 1
+PRED: SELECT T1.Zip FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.County = 'Fresno County Office of Education' AND T2.`Charter School (Y/N)` = 1
+
+[V_B_plan | bird_dev | wrong filter]
+Q: What is the unabbreviated mailing street address of the school with the highest FRPM count for K-12 students?
+GOLD: SELECT T2.MailStreet FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T1.`FRPM Count (K-12)` DESC LIMIT 1
+PRED: SELECT T1.MailStreet FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Low Grade` = 'K-12' ORDER BY T2.`FRPM Count (K-12)` DESC LIMIT 1
+
+[V_B_plan | bird_dev | wrong details]
+Q: Please list the phone numbers of the direct charter-funded schools that are opened after 2000/1/1.
+GOLD: SELECT T2.Phone FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`Charter School (Y/N)` = 1 AND T2.OpenDate > '2000-01-01'
+PRED: SELECT T1.Phone FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter School (Y/N)` = 1 AND T1.OpenDate > '2000-01-01'
+
+[V_B_plan | bird_dev | wrong details]
+Q: Among the schools with the SAT test takers of over 500, please list the schools that are magnet schools or offer a magnet program.
+GOLD: SELECT T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Magnet = 1 AND T1.NumTstTakr > 500
+PRED: SELECT T1.CDSCode FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr > 500 AND T1.Magnet = 1
+
+[V_B_plan | bird_dev | exec:syntax]
+Q: What is the number of SAT test takers of the schools with the highest FRPM count for K-12 students?
+GOLD: SELECT NumTstTakr FROM satscores WHERE cds = ( SELECT CDSCode FROM frpm ORDER BY `FRPM Count (K-12)` DESC LIMIT 1 )
+PRED: SELECT COUNT(T2.cname) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.FRPM Count (K-12) = ( SELECT T1.FRPM Count (K-12) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY T1.FRPM Count (K-12) DESC LIMIT 1 )
+
+[V_B_plan | bird_dev | wrong tables]
+Q: Among the schools with the average score in Math over 560 in the SAT test, how many schools are directly charter-funded?
+GOLD: SELECT COUNT(T2.`School Code`) FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrMath > 560 AND T2.`Charter Funding Type` = 'Directly funded'
+PRED: SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrMath > 560 AND T1.FundingType = 'Charter'
+
+[V_B_plan | bird_dev | exec:no-such-column]
+Q: For the school with the highest average score in Reading in the SAT test, what is its FRPM count for students aged 5-17?
+GOLD: SELECT T2.`FRPM Count (Ages 5-17)` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead DESC LIMIT 1
+PRED: SELECT T1.FRPMCount FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY T2.AvgScrRead DESC LIMIT 1
+
+[V_B_plan | bird_dev | exec:no-such-column]
+Q: Among the schools with an SAT excellence rate of over 0.3, what is the highest eligible free rate for students aged 5-17?
+GOLD: SELECT MAX(CAST(T1.`Free Meal Count (Ages 5-17)` AS REAL) / T1.`Enrollment (Ages 5-17)`) FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE CAST(T2.NumGE1500 AS REAL) / T2.NumTstTakr > 0.3
+PRED: SELECT T1.`Free Meal Count (Ages 5-17)` / T1.`Enrollment (Ages 5-17)` FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumGE1500 / T2.NumTstTakr > 0.3 ORDER BY T1.`Free Meal Count (Ages 5-17)` / T1.`Enrollment (Ages 5-17)` DESC LIMIT 1
+
+[V_B_plan | bird_dev | wrong aggregate]
+Q: Rank schools by their average score in Writing where the score is greater than 499, showing their charter numbers.
+GOLD: SELECT CharterNum, AvgScrWrite, RANK() OVER (ORDER BY AvgScrWrite DESC) AS WritingScoreRank FROM schools AS T1  INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 AND CharterNum is not null
+PRED: SELECT T1.CDSCode, T1.CharterNum FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 ORDER BY T2.AvgScrWrite
+
+[V_B_plan | bird_dev | wrong tables]
+Q: How many schools in Fresno (directly funded) have number of test takers not more than 250?
+GOLD: SELECT COUNT(T1.CDSCode) FROM frpm AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.`Charter Funding Type` = 'Directly funded' AND T1.`County Name` = 'Fresno' AND T2.NumTstTakr <= 250
+PRED: SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.County = 'Fresno' AND T2.NumTstTakr <= 250 AND T1.FundingType = 'Direct'
+
+[V_B_plan | bird_dev | exec:syntax]
+Q: Give the names of the schools with the percent eligible for free meals in K-12 is more than 0.1 and test takers whose test score is greater than or equal to 1500?
+GOLD: SELECT T2.`School Name` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE CAST(T2.`Free Meal Count (K-12)` AS REAL) / T2.`Enrollment (K-12)` > 0.1 AND T1.NumGE1500 > 0
+PRED: SELECT T1.School FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr >= 1500 AND T1.Free Meal Count (K-12) / T1.Enrollment (K-12) > 0.1
+
+[V_B_plan | bird_dev | wrong filter]
+Q: When did the first-through-twelfth-grade school with the largest enrollment open?
+GOLD: SELECT T2.OpenDate FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T1.`Enrollment (K-12)` DESC LIMIT 1
+PRED: SELECT T1.OpenDate FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Low Grade` = 'K-12' ORDER BY T2.`Enrollment (K-12)` DESC LIMIT 1
+
+[V_B_plan | bird_dev | wrong grouping]
+Q: Which cities have the top 5 lowest enrollment number for students in grades 1 through 12?
+GOLD: SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY SUM(T1.`Enrollment (K-12)`) ASC LIMIT 5
+PRED: SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Low Grade` = 'K-12' ORDER BY T1.`Enrollment (K-12)` LIMIT 5
+
+[V_B_plan | bird_dev | wrong ordering/limit]
+Q: What is the eligible free rate of the 10th and 11th schools with the highest enrolment for students in grades 1 through 12?
+GOLD: SELECT CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)` FROM frpm ORDER BY `Enrollment (K-12)` DESC LIMIT 9, 2
+PRED: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `Low Grade` = 10 AND `High Grade` = 11 AND `Enrollment (K-12)` > 0 AND `Free Meal Count (K-12)` > 0
+
+[V_B_plan | bird_dev | wrong grouping]
+Q: Under whose administration is the school with the highest number of students scoring 1500 or more on the SAT? Indicate their full names.
+GOLD: SELECT T2.AdmFName1, T2.AdmLName1, T2.AdmFName2, T2.AdmLName2, T2.AdmFName3, T2.AdmLName3 FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1
+PRED: SELECT T1.AdmFName1, T1.AdmLName1 FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumGE1500 >= 1500 GROUP BY T1.CDSCode ORDER BY COUNT(T1.CDSCode) DESC LIMIT 1
+
+[V_B_plan | bird_dev | wrong aggregate]
+Q: What is the average number of test takers from Fresno schools that opened between 1/1/1980 and 12/31/1980?
+GOLD: SELECT AVG(T1.NumTstTakr) FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE strftime('%Y', T2.OpenDate) = '1980' AND T2.County = 'Fresno'
+PRED: SELECT SUM(T2.NumTstTakr) / COUNT(T2.cds) FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.OpenDate BETWEEN '1980-01-01' AND '1980-12-31' AND T1.City = 'Fresno'
+
+[V_B_plan | bird_dev | wrong nesting/set op]
+Q: List the names of virtual schools that are among the top 5 in their respective counties based on average reading scores.
+GOLD: SELECT School FROM (SELECT T2.School,T1.AvgScrRead, RANK() OVER (PARTITION BY T2.County ORDER BY T1.AvgScrRead DESC) AS rnk FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Virtual = 'F' ) ranked_schools WHERE rnk <= 5
+PRED: SELECT T1.School FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T1.Virtual = 'F' GROUP BY T1.CDSCode ORDER BY AVG(T2.AvgScrRead) DESC LIMIT 5
+
+[V_B_plan | bird_dev | wrong filter]
+Q: What is the average math score of the school with the lowest average score for all subjects, and in which county is it located?
+GOLD: SELECT T1.AvgScrMath, T2.County FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T1.AvgScrMath IS NOT NULL ORDER BY T1.AvgScrMath + T1.AvgScrRead + T1.AvgScrWrite ASC LIMIT 1
+PRED: SELECT T1.County, T2.AvgScrMath + T2.AvgScrRead + T2.AvgScrWrite FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds ORDER BY T2.AvgScrMath + T2.AvgScrRead + T2.AvgScrWrite LIMIT 1
+
+[V_B_plan | bird_dev | wrong aggregate]
+Q: What is the average writing score of the school who has the highest number of test takers whose total SAT sscores are greater or equal to 1500? Indicate the city to where the school is situated.
+GOLD: SELECT T1.AvgScrWrite, T2.City FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.NumGE1500 DESC LIMIT 1
+PRED: SELECT AVG(T2.AvgScrWrite), T1.City FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.NumTstTakr >= 1500 ORDER BY T2.NumTstTakr DESC LIMIT 1
+
+[V_B_plan | bird_dev | wrong nesting/set op]
+Q: Which different county has the most number of closed schools? Please provide the name of each school as well as the closure date.
+GOLD: SELECT DISTINCT County, School, ClosedDate FROM schools WHERE County = ( SELECT County FROM schools WHERE StatusType = 'Closed' GROUP BY County ORDER BY COUNT(School) DESC LIMIT 1 ) AND StatusType = 'Closed' AND school IS NOT NULL
+PRED: SELECT County, ClosedDate FROM schools WHERE StatusType = 'Closed' GROUP BY County ORDER BY COUNT(ClosedDate) DESC LIMIT 1
+
+[V_B_plan | bird_dev | exec:syntax]
+Q: What is the total number of schools with a mailing city in Hickman belonging to the charter number 00D4?
+GOLD: SELECT COUNT(*) FROM schools WHERE CharterNum = '00D4' AND MailCity = 'Hickman'
+PRED: SELECT COUNT(CDSCode) FROM schools WHERE MailingCity = 'Hickman' AND Charter = 00D4
+
+[V_B_plan | bird_dev | exec:other]
+Q: Which county reported the most number of school closure in the 1980s with school wonership code belonging to Youth Authority Facilities (CEA)?
+GOLD: SELECT County FROM schools WHERE strftime('%Y', ClosedDate) BETWEEN '1980' AND '1989' AND StatusType = 'Closed' AND SOC = 11 GROUP BY County ORDER BY COUNT(School) DESC LIMIT 1
+PRED: SELECT County FROM schools WHERE SOC = 11 AND YEAR(ClosedDate) BETWEEN 1980 AND 1989 GROUP BY County ORDER BY COUNT(ClosedDate) DESC LIMIT 1
+
+[V_B_plan | bird_dev | wrong nesting/set op]
+Q: What are the two most common first names among the school administrators? Indicate the district to which they administer.
+GOLD: SELECT DISTINCT T1.AdmFName1, T1.District FROM schools AS T1 INNER JOIN ( SELECT admfname1 FROM schools GROUP BY admfname1 ORDER BY COUNT(admfname1) DESC LIMIT 2 ) AS T2 ON T1.AdmFName1 = T2.admfname1
+PRED: SELECT AdmFName1, AdmEmail1 FROM schools GROUP BY AdmFName1 ORDER BY COUNT(AdmFName1) DESC LIMIT 2
+
+[V_B_plan | bird_dev | wrong grouping]
+Q: What is the gender of the oldest client who opened his/her account in the highest average salary branch?
+GOLD: SELECT T2.gender FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id ORDER BY T1.A11 DESC, T2.birth_date ASC LIMIT 1
+PRED: SELECT T1.gender FROM client AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id GROUP BY T1.gender ORDER BY AVG(T2.A11) DESC LIMIT 1
+
+[V_B_plan | bird_dev | wrong ordering/limit]
+Q: In 1996, which districts have the highest unemployment rate? List their branch location and district name.
+GOLD: SELECT district_id, A2 FROM district ORDER BY A13 DESC LIMIT 1
+PRED: SELECT A2, A13 FROM district WHERE A13 IS NOT NULL AND A13 <> '' AND A13 <> 0 AND A13 <> 1 AND A13 <> 2 AND A13 <> 3 AND A13 <> 4 AND A13 <> 5 AND A13 <> 6 AND A13 <> 7 AND A13 <> 8 AND A13 <> 9 AND A13 <> 10 AND A13 <> 11 AND A13 <> 12 AND A13 <> 13 AND A13 <> 14 AND A13 <> 15 AND A13 <> 16 AND A13 <> 17 AND A13 <> 18 AND A13 <> 19 AND A13 <> 20 AND A13 <> 21 AND A13 <> 22 AND A13 <> 23 AND A13 <> 24 AND A13 <> 25 AND A13 <> 26 AND A13 <> 27 AND A13 <> 28 AND A13 <> 29 AND A13 <> 30 AND A13 <> 31 AND A13 <> 32 AND A13 <> 33 AND A13 <> 34 AND A13 <> 35 AND A13 <> 36 AND A13 <> 37 AND A13
+
+[V_B_plan | bird_dev | wrong ordering/limit]
+Q: Which card costs more converted mana, "Serra Angel" or "Shrine Keeper"?
+GOLD: SELECT name FROM cards WHERE name IN ('Serra Angel', 'Shrine Keeper') ORDER BY convertedManaCost DESC LIMIT 1
+PRED: SELECT CASE WHEN convertedManaCost > 1 THEN 'Serra Angel' ELSE 'Shrine Keeper' END FROM cards WHERE name IN ('Serra Angel', 'Shrine Keeper')
+
+[V_B_plan | bird_dev | exec:other]
+Q: How many wins was achieved by the oldest racer? Indicate his/her full name.
+GOLD: SELECT SUM(T1.wins),T2.forename, T2.surname FROM driverStandings AS T1 INNER JOIN drivers AS T2 on T1.driverId = T2.driverId ORDER BY T2.dob ASC LIMIT 1
+PRED: SELECT MIN(T1.dob), T1.forename, T1.surname FROM drivers AS T1 INNER JOIN driverStandings AS T2 ON T1.driverId = T2.driverId WHERE T2.wins = ( SELECT MIN(T2.wins) FROM driverStandings )
+
+[V_B_plan | bird_dev | exec:other]
+Q: List the long name of teams with above-average build-up play passing in 2012.
+GOLD: SELECT DISTINCT t4.team_long_name FROM Team_Attributes AS t3 INNER JOIN Team AS t4 ON t3.team_api_id = t4.team_api_id WHERE SUBSTR(t3.`date`, 1, 4) = '2012' AND t3.buildUpPlayPassing > ( SELECT CAST(SUM(t2.buildUpPlayPassing) AS REAL) / COUNT(t1.id) FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE STRFTIME('%Y',t2.`date`) = '2012')
+PRED: SELECT DISTINCT T1.team_long_name FROM Team AS T1 INNER JOIN Team_Attributes AS T2 ON T1.team_api_id = T2.team_api_id WHERE strftime('%Y', T2.date) = '2012' AND T2.buildUpPlayPassing > ( SELECT CAST(COUNT(T2.buildUpPlayPassing) AS REAL) / ( SELECT COUNT(T2.buildUpPlayPassing) FROM Team_Attributes AS T2 WHERE strftime('%Y', T2.date) = '2012' ) )
+
+[O_oracle_plan | bird_dev | wrong details]
+Q: What is the highest eligible free rate for K-12 students in the schools in Alameda County?
+GOLD: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda' ORDER BY (CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`) DESC LIMIT 1
+PRED: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda County' ORDER BY `Free Meal Count (K-12)` / `Enrollment (K-12)` DESC LIMIT 1
+
+[O_oracle_plan | bird_dev | wrong details]
+Q: Please list the lowest three eligible free rates for students aged 5-17 in continuation schools.
+GOLD: SELECT `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` FROM frpm WHERE `Educational Option Type` = 'Continuation School' AND `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` IS NOT NULL ORDER BY `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` ASC LIMIT 3
+PRED: SELECT `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` FROM frpm WHERE `School Type` = 'Continuation' ORDER BY `Free Meal Count (Ages 5-17)` / `Enrollment (Ages 5-17)` ASC LIMIT 3
+
+[O_oracle_plan | bird_dev | wrong details]
+Q: Please list the zip code of all the charter schools in Fresno County Office of Education.
+GOLD: SELECT T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`District Name` = 'Fresno County Office of Education' AND T1.`Charter School (Y/N)` = 1
+PRED: SELECT T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Charter School (Y/N)` = 1 AND T2.County = 'Fresno County Office of Education'
+
+[O_oracle_plan | bird_dev | exec:syntax]
+Q: What is the number of SAT test takers of the schools with the highest FRPM count for K-12 students?
+GOLD: SELECT NumTstTakr FROM satscores WHERE cds = ( SELECT CDSCode FROM frpm ORDER BY `FRPM Count (K-12)` DESC LIMIT 1 )
+PRED: SELECT NumTstTakr FROM satscores WHERE cds IN ( SELECT CDSCode FROM frpm ORDER BY FRPM Count (K-12) DESC LIMIT 1 )
+
+[O_oracle_plan | bird_dev | exec:no-such-column]
+Q: For the school with the highest average score in Reading in the SAT test, what is its FRPM count for students aged 5-17?
+GOLD: SELECT T2.`FRPM Count (Ages 5-17)` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead DESC LIMIT 1
+PRED: SELECT T2.FRPMCount FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode ORDER BY T1.AvgScrRead DESC LIMIT 1
+
+[O_oracle_plan | bird_dev | exec:no-such-column]
+Q: List the top five schools, by descending order, from the highest to the lowest, the most number of Enrollment (Ages 5-17). Please give their NCES school identification number.
+GOLD: SELECT T1.NCESSchool FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T2.`Enrollment (Ages 5-17)` DESC LIMIT 5
+PRED: SELECT T1.NCESchool FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode ORDER BY T2.`Enrollment (Ages 5-17)` DESC LIMIT 5
+
+[O_oracle_plan | bird_dev | wrong aggregate]
+Q: Rank schools by their average score in Writing where the score is greater than 499, showing their charter numbers.
+GOLD: SELECT CharterNum, AvgScrWrite, RANK() OVER (ORDER BY AvgScrWrite DESC) AS WritingScoreRank FROM schools AS T1  INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 AND CharterNum is not null
+PRED: SELECT T1.CDSCode, T1.CharterNum FROM schools AS T1 INNER JOIN satscores AS T2 ON T1.CDSCode = T2.cds WHERE T2.AvgScrWrite > 499 ORDER BY T2.AvgScrWrite DESC
+
+[O_oracle_plan | bird_dev | exec:syntax]
+Q: How many schools in Amador which the Low Grade is 9 and the High Grade is 12?
+GOLD: SELECT COUNT(T1.`School Name`) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Amador' AND T1.`Low Grade` = 9 AND T1.`High Grade` = 12
+PRED: SELECT COUNT(T1.CDSCode) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Amador' AND T1.Low Grade = 9 AND T1.High Grade = 12
+
+[O_oracle_plan | bird_dev | exec:no-such-column]
+Q: Name schools in Riverside which the average of average math score for SAT is grater than 400, what is the funding type of these schools?
+GOLD: SELECT T1.sname, T2.`Charter Funding Type` FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T2.`District Name` LIKE 'Riverside%' GROUP BY T1.sname, T2.`Charter Funding Type` HAVING CAST(SUM(T1.AvgScrMath) AS REAL) / COUNT(T1.cds) > 400
+PRED: SELECT T2.FundingType FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode WHERE T1.dname = 'Riverside' AND T1.AvgScrMath > 400 GROUP BY T2.FundingType HAVING COUNT(T2.FundingType) > 0
+
+[O_oracle_plan | bird_dev | exec:syntax]
+Q: State the names and full communication address of high schools in Monterey which has more than 800 free or reduced price meals for ages 15-17?
+GOLD: SELECT T1.`School Name`, T2.Street, T2.City, T2.State, T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Monterey' AND T1.`Free Meal Count (Ages 5-17)` > 800 AND T1.`School Type` = 'High Schools (Public)'
+PRED: SELECT T2.School, T2.Street, T2.City, T2.State, T2.Zip FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Free Meal Count (K-12)` > 800 AND T1.`Free Meal Count (Ages 5-17)` > 800 AND T1.`Percent (%) Eligible Free (K-12)` > 800 AND T1.`Percent (%) Eligible Free (Ages 5-17)` > 800 AND T1.`Percent (%) Eligible FRPM (K-12)` > 800 AND T1.`Percent (%) Eligible FRPM (Ages 5-17)` > 800 AND T1.`Enrollment (K-12)` > 800 AND T1.`Enrollment (Ages 5-17)` > 800 AND T1.`Percent (%) Eligible Free (K-12)` > 800 AND T1.`Percent (%) Eligible Free (Ages 5-17)` > 800 AND T1.`Percent (%) Eligible FRPM (K-12)` > 800 AND T1.`Percent (%) Eligible FRPM (Ages 5-17)` > 800 AND T1.`Enrollment (K-12)` > 800 AND T1.`En
+
+[O_oracle_plan | bird_dev | wrong nesting/set op]
+Q: List the names of virtual schools that are among the top 5 in their respective counties based on average reading scores.
+GOLD: SELECT School FROM (SELECT T2.School,T1.AvgScrRead, RANK() OVER (PARTITION BY T2.County ORDER BY T1.AvgScrRead DESC) AS rnk FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Virtual = 'F' ) ranked_schools WHERE rnk <= 5
+PRED: SELECT T2.School FROM satscores AS T1 INNER JOIN schools AS T2 ON T1.cds = T2.CDSCode WHERE T2.Virtual = 'F' AND T1.rtype = 'Reading' ORDER BY T1.AvgScrRead DESC
+
+[O_oracle_plan | bird_dev | wrong filter]
+Q: What is the ratio of merged Unified School District schools in Orange County to merged Elementary School District schools?
+GOLD: SELECT CAST(SUM(CASE WHEN DOC = 54 THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = 52 THEN 1 ELSE 0 END) FROM schools WHERE StatusType = 'Merged' AND County = 'Orange'
+PRED: SELECT CAST(SUM(CASE WHEN DOC = 54 THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = 52 THEN 1 ELSE 0 END) FROM schools
+
+[O_oracle_plan | bird_dev | wrong nesting/set op]
+Q: Which different county has the most number of closed schools? Please provide the name of each school as well as the closure date.
+GOLD: SELECT DISTINCT County, School, ClosedDate FROM schools WHERE County = ( SELECT County FROM schools WHERE StatusType = 'Closed' GROUP BY County ORDER BY COUNT(School) DESC LIMIT 1 ) AND StatusType = 'Closed' AND school IS NOT NULL
+PRED: SELECT DISTINCT County, ClosedDate FROM schools WHERE StatusType = 'Closed' GROUP BY County ORDER BY COUNT(ClosedDate) DESC LIMIT 1
+
+[O_oracle_plan | bird_dev | exec:other]
+Q: Which county reported the most number of school closure in the 1980s with school wonership code belonging to Youth Authority Facilities (CEA)?
+GOLD: SELECT County FROM schools WHERE strftime('%Y', ClosedDate) BETWEEN '1980' AND '1989' AND StatusType = 'Closed' AND SOC = 11 GROUP BY County ORDER BY COUNT(School) DESC LIMIT 1
+PRED: SELECT County FROM schools WHERE SOC = 11 AND YEAR(ClosedDate) BETWEEN 1980 AND 1989 GROUP BY County ORDER BY COUNT(ClosedDate) DESC LIMIT 1
+
+[O_oracle_plan | bird_dev | wrong filter]
+Q: The average unemployment ratio of 1995 and 1996, which one has higher percentage?
+GOLD: SELECT DISTINCT IIF(AVG(A13) > AVG(A12), '1996', '1995') FROM district
+PRED: SELECT AVG(A12) FROM district WHERE A12 IS NOT NULL AND A13 IS NOT NULL AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12 != 0 AND A13 != 0 AND A12
+
+[O_oracle_plan | bird_dev | wrong nesting/set op]
+Q: List out the account numbers of female clients who are oldest and has lowest average salary, calculate the gap between this lowest average salary with the highest average salary?
+GOLD: SELECT T1.account_id , ( SELECT MAX(A11) - MIN(A11) FROM district ) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id INNER JOIN disp AS T3 ON T1.account_id = T3.account_id INNER JOIN client AS T4 ON T3.client_id = T4.client_id WHERE T2.district_id = ( SELECT district_id FROM client WHERE gender = 'F' ORDER BY birth_date ASC LIMIT 1 ) ORDER BY T2.A11 DESC LIMIT 1
+PRED: SELECT T1.account_id FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id INNER JOIN disp AS T3 ON T1.account_id = T3.account_id INNER JOIN client AS T4 ON T3.client_id = T4.client_id WHERE T4.gender = 'F' ORDER BY T4.birth_date DESC LIMIT 1
+
+[O_oracle_plan | bird_dev | exec:other]
+Q: On average how many carcinogenic molecules are single bonded?
+GOLD: SELECT AVG(single_bond_count) FROM (SELECT T3.molecule_id, COUNT(T1.bond_type) AS single_bond_count FROM bond AS T1  INNER JOIN atom AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN molecule AS T3 ON T3.molecule_id = T2.molecule_id WHERE T1.bond_type = '-' AND T3.label = '+' GROUP BY T3.molecule_id) AS subquery
+PRED: SELECT AVG(COUNT(T2.atom_id)) FROM bond AS T1 INNER JOIN atom AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN molecule AS T3 ON T3.molecule_id = T2.molecule_id WHERE T1.bond_type = '-' GROUP BY T3.label
+
+[O_oracle_plan | bird_dev | exec:other]
+Q: Name the card and artist with the most ruling information. Also state if the card is a promotional printing.
+GOLD: SELECT T1.name, T1.artist, T1.isPromo FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.isPromo = 1 AND T1.artist = (SELECT artist FROM cards WHERE isPromo = 1 GROUP BY artist HAVING COUNT(DISTINCT uuid) = (SELECT MAX(count_uuid) FROM ( SELECT COUNT(DISTINCT uuid) AS count_uuid FROM cards WHERE isPromo = 1 GROUP BY artist ))) LIMIT 1
+PRED: SELECT T1.name, T1.artist, T1.isPromo FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.isPromo = 1 GROUP BY T1.name, T1.artist, T1.isPromo, T1.uuid HAVING COUNT(T1.uuid) = ( SELECT MAX(COUNT(T1.uuid)) FROM cards AS T1 INNER JOIN rulings AS T2 ON T1.uuid = T2.uuid WHERE T1.isPromo = 1 GROUP BY T1.name, T1.artist, T1.isPromo, T1.uuid ) LIMIT 1
+
+[O_oracle_plan | bird_dev | wrong tables]
+Q: How many cards are there in the set 'World Championship Decks 2004' with the converted mana cost as '3'.
+GOLD: SELECT COUNT(id) FROM cards WHERE setCode IN ( SELECT code FROM sets WHERE name = 'World Championship Decks 2004' ) AND convertedManaCost = 3
+PRED: SELECT COUNT(T1.id) FROM cards AS T1 WHERE T1.convertedManaCost = 3 AND T1.name = 'World Championship Decks 2004'
+
+[O_oracle_plan | bird_dev | wrong tables]
+Q: What are the post history type IDs for post ID 3720 and how many unique users have commented on the post?
+GOLD: SELECT T1.PostHistoryTypeId, (SELECT COUNT(DISTINCT UserId) FROM comments WHERE PostId = 3720) AS NumberOfUsers FROM postHistory AS T1 WHERE T1.PostId = 3720
+PRED: SELECT PostHistoryTypeId, COUNT(DISTINCT UserId) FROM postHistory WHERE PostId = 3720 AND Comment IS NOT NULL
+
+[O_oracle_plan | bird_dev | wrong aggregate]
+Q: How many comments were added to the post with the highest score?
+GOLD: SELECT COUNT(T2.Id) FROM posts AS T1 INNER JOIN comments AS T2 ON T1.Id = T2.PostId GROUP BY T1.Id ORDER BY SUM(T1.Score) DESC LIMIT 1
+PRED: SELECT COUNT(T2.Id) FROM posts AS T1 INNER JOIN comments AS T2 ON T1.Id = T2.PostId GROUP BY T1.Id ORDER BY T1.Score DESC LIMIT 1
+
+[O_oracle_plan | bird_dev | wrong aggregate]
+Q: Rank heroes published by Marvel Comics by their height in descending order.
+GOLD: SELECT superhero_name, height_cm, RANK() OVER (ORDER BY height_cm DESC) AS HeightRank FROM superhero INNER JOIN publisher ON superhero.publisher_id = publisher.id WHERE publisher.publisher_name = 'Marvel Comics'
+PRED: SELECT T1.superhero_name, T1.height_cm, T2.publisher_name FROM superhero AS T1 INNER JOIN publisher AS T2 ON T1.publisher_id = T2.id WHERE T2.publisher_name = 'Marvel Comics' ORDER BY T1.height_cm DESC
+
+[O_oracle_plan | bird_dev | wrong ordering/limit]
+Q: Which driver ranked the first in the Canadian Grand Prix in 2007? Please give his reference name.
+GOLD: SELECT T3.forename, T3.surname, T3.driverRef FROM races AS T1 INNER JOIN results AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId WHERE T1.name = 'Canadian Grand Prix' AND T2.rank = 1 AND T1.year = 2007
+PRED: SELECT T3.driverRef FROM races AS T1 INNER JOIN results AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId WHERE T1.name = 'Canadian Grand Prix' AND T1.year = 2007 ORDER BY T2.position ASC LIMIT 1
+
+[O_oracle_plan | bird_dev | exec:no-such-table]
+Q: How much faster in percentage is the champion than the driver who finished the race last in the 2008 Australian Grand Prix?
+GOLD: WITH time_in_seconds AS ( SELECT T1.positionOrder, CASE WHEN T1.positionOrder = 1 THEN (CAST(SUBSTR(T1.time, 1, 1) AS REAL) * 3600) + (CAST(SUBSTR(T1.time, 3, 2) AS REAL) * 60) + CAST(SUBSTR(T1.time, 6) AS REAL) ELSE CAST(SUBSTR(T1.time, 2) AS REAL) END AS time_seconds FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId WHERE T2.name = 'Australian Grand Prix' AND T1.time IS NOT NULL AND T2.year = 2008 ), champion_time AS ( SELECT time_seconds FROM time_in_seconds WHERE positionOrder = 1), last_driver_incremental AS ( SELECT time_seconds FROM time_in_seconds WHERE positionOrder = (SELECT MAX(positionOrder) FROM time_in_seconds) ) SELECT (CAST((SELECT time_seconds FROM last_driver_incremental) AS REAL) * 100) / (SELECT time_seconds + (SELECT time_seconds FROM last_driver_incremental) FROM champion_time)
+PRED: SELECT (CAST((T1.time - T2.time) AS REAL) / T2.time) * 100 FROM ( SELECT T1.time, T2.time FROM champion_time AS T1 INNER JOIN results AS T2 ON T2.raceId = T1.raceId WHERE T1.year = 2008 AND T1.raceId = 10 ) AS T1 INNER JOIN ( SELECT T1.time FROM time_in_seconds AS T1 INNER JOIN last_driver_incremental AS T2 ON T1.raceId = T2.raceId WHERE T1.year = 2008 AND T1.raceId = 10 ) AS T2 ON T1.raceId = T2.raceId
+
+[O_oracle_plan | bird_dev | wrong tables]
+Q: What is the average time in seconds of champion for each year, before year 1975?
+GOLD: WITH time_in_seconds AS ( SELECT T2.year, T2.raceId, T1.positionOrder, CASE WHEN T1.positionOrder = 1 THEN (CAST(SUBSTR(T1.time, 1, 1) AS REAL) * 3600) + (CAST(SUBSTR(T1.time, 3, 2) AS REAL) * 60) + CAST(SUBSTR(T1.time, 6,2) AS REAL )   + CAST(SUBSTR(T1.time, 9) AS REAL)/1000 ELSE 0 END AS time_seconds FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId WHERE T1.time IS NOT NULL ), champion_time AS ( SELECT year, raceId, time_seconds FROM time_in_seconds WHERE positionOrder = 1 ) SELECT year, AVG(time_seconds) FROM champion_time WHERE year < 1975 GROUP BY year HAVING AVG(time_seconds) IS NOT NULL
+PRED: SELECT AVG(T1.time) FROM ( SELECT T3.year, T2.time FROM results AS T2 INNER JOIN races AS T3 ON T2.raceId = T3.raceId WHERE T3.year < 1975 GROUP BY T3.year ) AS T1 GROUP BY T1.year
+
+[O_oracle_plan | bird_dev | wrong filter]
+Q: In terms of number of points acquired, how many victories did the driver who ranked 91st acquired?
+GOLD: SELECT SUM(CASE WHEN points = 91 THEN wins ELSE 0 END) FROM driverStandings
+PRED: SELECT SUM(wins) FROM driverStandings WHERE position = 91
+
+[O_oracle_plan | bird_dev | exec:no-such-table]
+Q: What is the lap record for the Austrian Grand Prix Circuit?
+GOLD: WITH fastest_lap_times AS ( SELECT T1.raceId, T1.fastestLapTime FROM results AS T1 WHERE T1.FastestLapTime IS NOT NULL) SELECT MIN(fastest_lap_times.fastestLapTime) as lap_record FROM fastest_lap_times INNER JOIN races AS T2 on fastest_lap_times.raceId = T2.raceId INNER JOIN circuits AS T3 on T2.circuitId = T3.circuitId WHERE T2.name = 'Austrian Grand Prix'
+PRED: SELECT T1.time FROM fastest_lap_times AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId INNER JOIN circuits AS T3 ON T2.circuitId = T3.circuitId WHERE T3.name = 'Austrian Grand Prix' AND T1.position = 1 AND T1.lap = 1 AND T1.milliseconds = ( SELECT MIN(T1.milliseconds) FROM fastest_lap_times AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId INNER JOIN circuits AS T3 ON T2.circuitId = T3.circuitId WHERE T3.name = 'Austrian Grand Prix' AND T1.position = 1 AND T1.lap = 1 )
+
+[O_oracle_plan | bird_dev | exec:no-such-table]
+Q: Please list the lap records for the circuits in Italy.
+GOLD: WITH fastest_lap_times AS (SELECT T1.raceId, T1.FastestLapTime, (CAST(SUBSTR(T1.FastestLapTime, 1, INSTR(T1.FastestLapTime, ':') - 1) AS REAL) * 60) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, ':') + 1, INSTR(T1.FastestLapTime, '.') - INSTR(T1.FastestLapTime, ':') - 1) AS REAL)) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, '.') + 1) AS REAL) / 1000) as time_in_seconds FROM results AS T1 WHERE T1.FastestLapTime IS NOT NULL ) SELECT T1.FastestLapTime as lap_record FROM results AS T1 INNER JOIN races AS T2 on T1.raceId = T2.raceId INNER JOIN circuits AS T3 on T2.circuitId = T3.circuitId INNER JOIN (SELECT MIN(fastest_lap_times.time_in_seconds) as min_time_in_seconds FROM fastest_lap_times INNER JOIN races AS T2 on fastest_lap_times.raceId = T2.raceId INNER JOIN circuits AS T3 on T2.circuitId = T3.circuitId WHERE T3.country = 'Italy' ) AS T4 ON (CAST(SUBSTR(T1.FastestLapTime, 1, INSTR(T1.FastestLapTime, ':') - 1) AS REAL) * 60) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, ':') + 1, INSTR(T1.FastestLapTime, '.') - INSTR(T1.FastestLapTime, ':') - 1) AS REAL)) + (CAST(SUBSTR(T1.FastestLapTime, INSTR(T1.FastestLapTime, '.') + 1) AS REAL) / 1000) = T4.min_time_in_seconds LIMIT 1
+PRED: SELECT T4.min_time_in_seconds FROM ( SELECT T3.circuitId, MIN(T4.milliseconds) AS min_time_in_seconds FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId INNER JOIN circuits AS T3 ON T2.circuitId = T3.circuitId INNER JOIN fastest_lap_times AS T4 ON T4.raceId = T2.raceId ) AS T1 INNER JOIN circuits AS T2 ON T1.circuitId = T2.circuitId WHERE T2.country = 'Italy' LIMIT 1
+
+[O_oracle_plan | bird_dev | wrong grouping]
+Q: List the long name of teams with above-average build-up play passing in 2012.
+GOLD: SELECT DISTINCT t4.team_long_name FROM Team_Attributes AS t3 INNER JOIN Team AS t4 ON t3.team_api_id = t4.team_api_id WHERE SUBSTR(t3.`date`, 1, 4) = '2012' AND t3.buildUpPlayPassing > ( SELECT CAST(SUM(t2.buildUpPlayPassing) AS REAL) / COUNT(t1.id) FROM Team AS t1 INNER JOIN Team_Attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE STRFTIME('%Y',t2.`date`) = '2012')
+PRED: SELECT DISTINCT T2.team_long_name FROM Team_Attributes AS T1 INNER JOIN Team AS T2 ON T1.team_api_id = T2.team_api_id INNER JOIN ( SELECT team_api_id, SUM(buildUpPlayPassing) FROM Team_Attributes WHERE strftime('%Y', date) = '2012' GROUP BY team_api_id ) AS T3 ON T1.team_api_id = T3.team_api_id WHERE T1.buildUpPlayPassing > ( SELECT CAST(SUM(buildUpPlayPassing) AS REAL) / COUNT(team_api_id) FROM Team_Attributes WHERE strftime('%Y', date) = '2012' )
+
+[O_oracle_plan | bird_dev | wrong ordering/limit]
+Q: Which player is older, Aaron Lennon or Abdelaziz Barrada?
+GOLD: SELECT player_name FROM Player WHERE player_name IN ('Aaron Lennon', 'Abdelaziz Barrada') ORDER BY birthday ASC LIMIT 1
+PRED: SELECT player_name FROM Player WHERE player_api_id = 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+[O_oracle_plan | bird_dev | wrong grouping]
+Q: Give the name of the league had the most matches in the 2008/2009 season?
+GOLD: SELECT t1.name FROM League AS t1 JOIN Match AS t2 ON t1.id = t2.league_id WHERE t2.season = '2008/2009' GROUP BY t1.name HAVING COUNT(t2.id) = (SELECT MAX(match_count) FROM (SELECT COUNT(t2.id) AS match_count FROM Match AS t2 WHERE t2.season = '2008/2009' GROUP BY t2.league_id))
+PRED: SELECT T1.name FROM League AS T1 INNER JOIN ( SELECT T1.id, COUNT(T1.id) AS num FROM League AS T1 INNER JOIN ( SELECT league_id FROM Match WHERE season = '2008/2009' GROUP BY league_id ) AS T2 ON T1.id = T2. league_id ) AS T3 ON T1.id = T3.id WHERE T3.num = ( SELECT MAX(num) FROM ( SELECT T1.id, COUNT(T1.id) AS num FROM League AS T1 INNER JOIN ( SELECT league_id FROM Match WHERE season = '2008/2009' GROUP BY league_id ) AS T2 ON T1.id = T2. league_id ) AS T3 )

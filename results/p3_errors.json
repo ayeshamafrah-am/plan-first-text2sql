@@ -1,0 +1,414 @@
+{
+ "A_direct|spider_dev": {
+  "total_wrong": 309,
+  "by_category": {
+   "wrong details": 118,
+   "wrong aggregate": 11,
+   "wrong grouping": 14,
+   "exec:no-such-column": 63,
+   "wrong nesting/set op": 25,
+   "wrong tables": 68,
+   "wrong ordering/limit": 3,
+   "exec:no-such-table": 3,
+   "exec:syntax": 1,
+   "wrong filter": 1,
+   "exec:other": 2
+  },
+  "by_hardness": {
+   "medium": {
+    "wrong details": 63,
+    "wrong aggregate": 6,
+    "exec:no-such-column": 19,
+    "wrong tables": 28,
+    "wrong grouping": 6,
+    "exec:no-such-table": 2,
+    "wrong nesting/set op": 1,
+    "wrong filter": 1,
+    "wrong ordering/limit": 1
+   },
+   "extra": {
+    "wrong grouping": 4,
+    "wrong nesting/set op": 10,
+    "exec:no-such-column": 27,
+    "wrong tables": 14,
+    "wrong details": 25,
+    "exec:no-such-table": 1,
+    "exec:syntax": 1,
+    "wrong aggregate": 2,
+    "exec:other": 2
+   },
+   "hard": {
+    "exec:no-such-column": 15,
+    "wrong tables": 21,
+    "wrong ordering/limit": 2,
+    "wrong nesting/set op": 14,
+    "wrong details": 10,
+    "wrong grouping": 3,
+    "wrong aggregate": 2
+   },
+   "easy": {
+    "wrong details": 20,
+    "wrong aggregate": 1,
+    "wrong grouping": 1,
+    "wrong tables": 5,
+    "exec:no-such-column": 2
+   }
+  }
+ },
+ "B_plan|spider_dev": {
+  "total_wrong": 291,
+  "by_category": {
+   "wrong details": 120,
+   "wrong aggregate": 12,
+   "wrong tables": 72,
+   "wrong grouping": 12,
+   "wrong nesting/set op": 33,
+   "exec:syntax": 2,
+   "exec:no-such-column": 35,
+   "exec:other": 1,
+   "wrong ordering/limit": 3,
+   "wrong filter": 1
+  },
+  "by_hardness": {
+   "medium": {
+    "wrong details": 67,
+    "wrong aggregate": 6,
+    "wrong tables": 20,
+    "wrong grouping": 5,
+    "exec:no-such-column": 6,
+    "wrong nesting/set op": 1,
+    "wrong filter": 1,
+    "wrong ordering/limit": 2
+   },
+   "extra": {
+    "wrong grouping": 4,
+    "wrong details": 20,
+    "wrong nesting/set op": 18,
+    "exec:no-such-column": 21,
+    "wrong tables": 20,
+    "wrong aggregate": 4,
+    "wrong ordering/limit": 1
+   },
+   "hard": {
+    "wrong nesting/set op": 14,
+    "exec:syntax": 2,
+    "wrong tables": 19,
+    "exec:no-such-column": 6,
+    "exec:other": 1,
+    "wrong grouping": 3,
+    "wrong details": 16,
+    "wrong aggregate": 2
+   },
+   "easy": {
+    "wrong details": 17,
+    "wrong tables": 13,
+    "exec:no-such-column": 2
+   }
+  }
+ },
+ "V_B_plan|spider_dev": {
+  "total_wrong": 289,
+  "by_category": {
+   "wrong details": 121,
+   "wrong aggregate": 11,
+   "wrong tables": 68,
+   "wrong grouping": 13,
+   "wrong nesting/set op": 33,
+   "exec:syntax": 2,
+   "exec:no-such-table": 1,
+   "exec:no-such-column": 37,
+   "exec:other": 1,
+   "wrong ordering/limit": 2
+  },
+  "by_hardness": {
+   "medium": {
+    "wrong details": 68,
+    "wrong aggregate": 5,
+    "wrong tables": 18,
+    "wrong grouping": 6,
+    "exec:no-such-column": 7,
+    "wrong ordering/limit": 1
+   },
+   "extra": {
+    "wrong grouping": 4,
+    "wrong details": 21,
+    "wrong nesting/set op": 18,
+    "exec:no-such-table": 1,
+    "exec:no-such-column": 22,
+    "wrong tables": 19,
+    "wrong aggregate": 4,
+    "wrong ordering/limit": 1
+   },
+   "hard": {
+    "wrong nesting/set op": 15,
+    "exec:syntax": 2,
+    "wrong tables": 18,
+    "exec:no-such-column": 6,
+    "exec:other": 1,
+    "wrong grouping": 3,
+    "wrong details": 15,
+    "wrong aggregate": 2
+   },
+   "easy": {
+    "wrong details": 17,
+    "wrong tables": 13,
+    "exec:no-such-column": 2
+   }
+  }
+ },
+ "O_oracle_plan|spider_dev": {
+  "total_wrong": 187,
+  "by_category": {
+   "wrong details": 145,
+   "wrong nesting/set op": 12,
+   "exec:no-such-column": 18,
+   "wrong filter": 2,
+   "wrong tables": 3,
+   "wrong aggregate": 1,
+   "wrong ordering/limit": 4,
+   "wrong grouping": 2
+  },
+  "by_hardness": {
+   "medium": {
+    "wrong details": 72,
+    "exec:no-such-column": 7,
+    "wrong ordering/limit": 3,
+    "wrong grouping": 1
+   },
+   "extra": {
+    "wrong details": 35,
+    "wrong nesting/set op": 8,
+    "wrong tables": 3,
+    "exec:no-such-column": 1,
+    "wrong ordering/limit": 1,
+    "wrong grouping": 1
+   },
+   "hard": {
+    "wrong details": 24,
+    "wrong filter": 2,
+    "exec:no-such-column": 8,
+    "wrong nesting/set op": 2
+   },
+   "easy": {
+    "wrong details": 14,
+    "exec:no-such-column": 2,
+    "wrong aggregate": 1,
+    "wrong nesting/set op": 2
+   }
+  }
+ },
+ "A_direct|bird_dev": {
+  "total_wrong": 971,
+  "by_category": {
+   "wrong tables": 242,
+   "wrong filter": 15,
+   "wrong details": 358,
+   "exec:no-such-column": 207,
+   "wrong grouping": 24,
+   "wrong aggregate": 35,
+   "exec:syntax": 11,
+   "exec:other": 11,
+   "wrong nesting/set op": 53,
+   "wrong ordering/limit": 12,
+   "exec:no-such-table": 3
+  },
+  "by_hardness": {
+   "simple": {
+    "wrong tables": 139,
+    "wrong details": 199,
+    "exec:no-such-column": 92,
+    "wrong grouping": 13,
+    "wrong aggregate": 14,
+    "wrong filter": 9,
+    "exec:other": 5,
+    "exec:syntax": 8,
+    "wrong nesting/set op": 27,
+    "exec:no-such-table": 1,
+    "wrong ordering/limit": 4
+   },
+   "moderate": {
+    "wrong filter": 4,
+    "wrong details": 128,
+    "exec:no-such-column": 86,
+    "wrong tables": 72,
+    "exec:syntax": 3,
+    "wrong nesting/set op": 20,
+    "wrong grouping": 7,
+    "exec:other": 5,
+    "wrong ordering/limit": 6,
+    "wrong aggregate": 15,
+    "exec:no-such-table": 1
+   },
+   "challenging": {
+    "wrong details": 31,
+    "wrong filter": 2,
+    "wrong grouping": 4,
+    "wrong tables": 31,
+    "exec:no-such-column": 29,
+    "wrong aggregate": 6,
+    "wrong ordering/limit": 2,
+    "wrong nesting/set op": 6,
+    "exec:no-such-table": 1,
+    "exec:other": 1
+   }
+  }
+ },
+ "B_plan|bird_dev": {
+  "total_wrong": 955,
+  "by_category": {
+   "wrong tables": 261,
+   "wrong details": 351,
+   "wrong filter": 24,
+   "exec:syntax": 16,
+   "exec:no-such-column": 154,
+   "wrong aggregate": 53,
+   "wrong grouping": 26,
+   "wrong nesting/set op": 51,
+   "exec:other": 9,
+   "wrong ordering/limit": 10
+  },
+  "by_hardness": {
+   "simple": {
+    "wrong tables": 147,
+    "wrong details": 191,
+    "wrong filter": 17,
+    "exec:syntax": 8,
+    "exec:no-such-column": 74,
+    "wrong aggregate": 22,
+    "wrong grouping": 13,
+    "wrong nesting/set op": 25,
+    "wrong ordering/limit": 5,
+    "exec:other": 3
+   },
+   "moderate": {
+    "wrong details": 126,
+    "exec:no-such-column": 62,
+    "exec:syntax": 6,
+    "wrong tables": 77,
+    "wrong nesting/set op": 21,
+    "wrong filter": 7,
+    "wrong aggregate": 22,
+    "exec:other": 5,
+    "wrong grouping": 11,
+    "wrong ordering/limit": 3
+   },
+   "challenging": {
+    "wrong details": 34,
+    "wrong grouping": 2,
+    "wrong tables": 37,
+    "exec:no-such-column": 18,
+    "exec:syntax": 2,
+    "wrong aggregate": 9,
+    "wrong ordering/limit": 2,
+    "wrong nesting/set op": 5,
+    "exec:other": 1
+   }
+  }
+ },
+ "V_B_plan|bird_dev": {
+  "total_wrong": 954,
+  "by_category": {
+   "wrong tables": 258,
+   "exec:no-such-column": 148,
+   "wrong details": 359,
+   "wrong filter": 22,
+   "exec:syntax": 19,
+   "wrong aggregate": 50,
+   "wrong grouping": 25,
+   "wrong ordering/limit": 11,
+   "wrong nesting/set op": 53,
+   "exec:other": 9
+  },
+  "by_hardness": {
+   "simple": {
+    "wrong tables": 146,
+    "wrong details": 196,
+    "wrong filter": 16,
+    "exec:syntax": 8,
+    "exec:no-such-column": 72,
+    "wrong aggregate": 21,
+    "wrong grouping": 14,
+    "wrong nesting/set op": 25,
+    "wrong ordering/limit": 6,
+    "exec:other": 2
+   },
+   "moderate": {
+    "exec:no-such-column": 59,
+    "wrong details": 129,
+    "exec:syntax": 6,
+    "wrong tables": 77,
+    "wrong ordering/limit": 3,
+    "wrong filter": 6,
+    "wrong nesting/set op": 21,
+    "wrong aggregate": 21,
+    "exec:other": 5,
+    "wrong grouping": 9
+   },
+   "challenging": {
+    "wrong details": 34,
+    "wrong grouping": 2,
+    "wrong tables": 35,
+    "exec:syntax": 5,
+    "exec:no-such-column": 17,
+    "wrong nesting/set op": 7,
+    "wrong aggregate": 8,
+    "wrong ordering/limit": 2,
+    "exec:other": 2
+   }
+  }
+ },
+ "O_oracle_plan|bird_dev": {
+  "total_wrong": 663,
+  "by_category": {
+   "wrong details": 512,
+   "exec:syntax": 12,
+   "exec:no-such-column": 68,
+   "wrong aggregate": 8,
+   "wrong nesting/set op": 32,
+   "wrong filter": 5,
+   "exec:other": 10,
+   "wrong tables": 8,
+   "wrong ordering/limit": 2,
+   "exec:no-such-table": 4,
+   "wrong grouping": 2
+  },
+  "by_hardness": {
+   "simple": {
+    "wrong details": 256,
+    "exec:syntax": 6,
+    "exec:no-such-column": 37,
+    "wrong aggregate": 3,
+    "wrong nesting/set op": 9,
+    "wrong filter": 4,
+    "wrong tables": 3,
+    "exec:no-such-table": 1,
+    "wrong ordering/limit": 1,
+    "wrong grouping": 1,
+    "exec:other": 1
+   },
+   "moderate": {
+    "wrong details": 195,
+    "exec:no-such-column": 25,
+    "exec:syntax": 3,
+    "wrong filter": 1,
+    "wrong nesting/set op": 19,
+    "exec:other": 5,
+    "wrong aggregate": 3,
+    "wrong ordering/limit": 1,
+    "exec:no-such-table": 1,
+    "wrong tables": 2
+   },
+   "challenging": {
+    "wrong details": 61,
+    "wrong nesting/set op": 4,
+    "exec:no-such-column": 6,
+    "exec:syntax": 3,
+    "exec:other": 4,
+    "exec:no-such-table": 2,
+    "wrong tables": 3,
+    "wrong grouping": 1,
+    "wrong aggregate": 2
+   }
+  }
+ }
+}

@@ -1,0 +1,8 @@
+transformers>=4.50
+peft>=0.14
+trl>=0.17
+datasets
+accelerate
+sqlglot>=26
+nltk
+numpy

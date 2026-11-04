@@ -1,0 +1,29 @@
+{
+ "file": "preds/p3/A_direct_s3_spider_dev.jsonl",
+ "n": 1034,
+ "ex": 69.4,
+ "errors": 74,
+ "gold_errors": 0,
+ "by_hardness": {
+  "easy": {
+   "n": 248,
+   "ex": 89.5,
+   "errors": 0
+  },
+  "medium": {
+   "n": 446,
+   "ex": 68.8,
+   "errors": 28
+  },
+  "hard": {
+   "n": 174,
+   "ex": 63.2,
+   "errors": 18
+  },
+  "extra": {
+   "n": 166,
+   "ex": 47.6,
+   "errors": 28
+  }
+ }
+}
